@@ -1,77 +1,178 @@
-"use client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import MetricsCard from "@/components/MetricsCard";
+import OnboardingChecklist from "@/components/OnboardingChecklist";
+import TeamDirectory from "@/components/TeamDirectory";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { TrendingUp, Clock, Users, CheckCircle2 } from "lucide-react";
 
-import { useSession } from "@/lib/auth-client";
-import { UserProfile } from "@/components/auth/user-profile";
-import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
-import { useDiagnostics } from "@/hooks/use-diagnostics";
-import Link from "next/link";
-
-export default function DashboardPage() {
-  const { data: session, isPending } = useSession();
-  const { isAiReady, loading: diagnosticsLoading } = useDiagnostics();
-
-  if (isPending) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
-  }
+export default async function DashboardPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   if (!session) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="mb-8">
-            <Lock className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h1 className="text-2xl font-bold mb-2">Protected Page</h1>
-            <p className="text-muted-foreground mb-6">
-              You need to sign in to access the dashboard
-            </p>
-          </div>
-          <UserProfile />
-        </div>
-      </div>
-    );
+    redirect("/");
   }
 
+  const user = session.user;
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-      </div>
+    <div className="min-h-screen bg-gradient-subtle">
+      <div className="container mx-auto px-4 py-8">
+        <div className="space-y-8">
+          {/* Header Section */}
+          <header className="space-y-4">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                  Welcome back, {user.name}! 👋
+                </h1>
+                <p className="text-muted-foreground mt-1">You&apos;re crushing week 2!</p>
+              </div>
+              <div className="flex gap-2">
+                <Badge variant="outline">Employee View</Badge>
+                <Badge variant="secondary">Manager View</Badge>
+              </div>
+            </div>
+          </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 border border-border rounded-lg">
-          <h2 className="text-xl font-semibold mb-2">AI Chat</h2>
-          <p className="text-muted-foreground mb-4">
-            Start a conversation with AI using the Vercel AI SDK
-          </p>
-          {(diagnosticsLoading || !isAiReady) ? (
-            <Button disabled={true}>
-              Go to Chat
-            </Button>
-          ) : (
-            <Button asChild>
-              <Link href="/chat">Go to Chat</Link>
-            </Button>
-          )}
-        </div>
+          {/* Metrics Section */}
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">Your Progress</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              <MetricsCard
+                title="Days Active"
+                value="12"
+                change="+2 days this week"
+                trend="neutral"
+                icon={Clock}
+              />
+              <MetricsCard
+                title="Tasks Completed"
+                value="8/15"
+                change="53% completion"
+                trend="up"
+                icon={CheckCircle2}
+              />
+              <MetricsCard
+                title="Team Connections"
+                value="12"
+                change="+3 this week"
+                trend="up"
+                icon={Users}
+              />
+              <MetricsCard
+                title="Confidence Score"
+                value="7.5/10"
+                change="+1.2 from last week"
+                trend="up"
+                icon={TrendingUp}
+              />
+            </div>
+          </section>
 
-        <div className="p-6 border border-border rounded-lg">
-          <h2 className="text-xl font-semibold mb-2">Profile</h2>
-          <p className="text-muted-foreground mb-4">
-            Manage your account settings and preferences
-          </p>
-          <div className="space-y-2">
-            <p>
-              <strong>Name:</strong> {session.user.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {session.user.email}
-            </p>
+          {/* Main Content Grid */}
+          <div className="grid gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <OnboardingChecklist />
+            </div>
+            <div>
+              <TeamDirectory />
+            </div>
           </div>
+
+          {/* 90-Day Timeline Section */}
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">Your 90-Day Roadmap</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                {
+                  phase: "Days 1-30",
+                  title: "Foundation & Culture",
+                  status: "Completed",
+                  progress: 100,
+                  milestones: [
+                    "Complete onboarding orientation",
+                    "Meet your team and manager",
+                    "Set up workspace and tools",
+                    "Learn company culture and values"
+                  ]
+                },
+                {
+                  phase: "Days 31-60",
+                  title: "Skills & Integration",
+                  status: "In Progress",
+                  progress: 60,
+                  milestones: [
+                    "Complete role-specific training",
+                    "Shadow team members",
+                    "Take on first projects",
+                    "Build cross-functional relationships"
+                  ]
+                },
+                {
+                  phase: "Days 61-90",
+                  title: "Impact & Independence",
+                  status: "Upcoming",
+                  progress: 20,
+                  milestones: [
+                    "Lead your first project",
+                    "Contribute to team goals",
+                    "Identify improvement opportunities",
+                    "Complete 90-day review"
+                  ]
+                },
+              ].map((milestone, index) => (
+                <div
+                  key={index}
+                  className="p-6 bg-card rounded-lg border border-border hover:shadow-soft transition-all"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-xs">
+                        {milestone.phase}
+                      </Badge>
+                      <Badge
+                        variant={
+                          milestone.status === "Completed"
+                            ? "default"
+                            : milestone.status === "In Progress"
+                            ? "secondary"
+                            : "outline"
+                        }
+                        className="text-xs"
+                      >
+                        {milestone.status}
+                      </Badge>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">
+                      {milestone.title}
+                    </h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Progress</span>
+                        <span className="font-medium text-foreground">
+                          {milestone.progress}%
+                        </span>
+                      </div>
+                      <Progress value={milestone.progress} className="h-2" />
+                    </div>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      {milestone.milestones.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
     </div>
