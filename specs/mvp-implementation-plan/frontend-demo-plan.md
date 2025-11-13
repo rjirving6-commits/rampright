@@ -69,19 +69,19 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - Pre-populated with mock data
 
 ### Verification Checklist
-- [ ] Can access /admin/setup page
-- [ ] Step 1: Company info form works
-- [ ] Step 2: Template selection UI displays
-- [ ] Step 3: All 5 module editors work
-- [ ] Step 3: People editor add/edit/delete works
-- [ ] Step 4: Invite form accepts email
-- [ ] Step navigation (next/back) works
-- [ ] Final step console.logs collected data
-- [ ] UI styled with shadcn/ui components
-- [ ] Responsive design works
-- [ ] Dark/light mode works
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Can access /admin/setup page
+- [x] Step 1: Company info form works
+- [x] Step 2: Template selection UI displays
+- [x] Step 3: All 5 module editors work
+- [x] Step 3: People editor add/edit/delete works
+- [x] Step 4: Invite form accepts email
+- [x] Step navigation (next/back) works
+- [x] Final step console.logs collected data
+- [x] UI styled with shadcn/ui components
+- [x] Responsive design works
+- [x] Dark/light mode works
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -401,7 +401,7 @@ After EVERY phase:
 
 ## Current Status
 - [x] Phase 1: Mock Data Setup
-- [ ] Phase 2: Manager Setup Flow (UI Only)
+- [x] Phase 2: Manager Setup Flow (UI Only)
 - [ ] Phase 3: New Hire Dashboard (UI Only)
 - [ ] Phase 4: Module Content Pages
 - [ ] Phase 5: Manager Progress View
