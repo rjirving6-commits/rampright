@@ -13,7 +13,6 @@ import {
   ArrowRight,
   CheckCircle2
 } from "lucide-react";
-import { SiteFooter } from "@/components/site-footer";
 
 export default function Home() {
   const features = [
@@ -172,9 +171,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <SiteFooter />
     </div>
   );
 }
