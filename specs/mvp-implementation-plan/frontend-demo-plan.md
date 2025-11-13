@@ -169,19 +169,19 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - "View Details" CTAs
 
 ### Verification Checklist
-- [ ] Can access /onboarding/modules/company_overview
-- [ ] Can access /onboarding/modules/product_overview
-- [ ] Can access /onboarding/modules/competitive_landscape
-- [ ] Can access /onboarding/modules/tools_systems
-- [ ] Module content displays from mock data
-- [ ] Navigation from dashboard works
-- [ ] Content formatted nicely
-- [ ] Module viewer component reusable
-- [ ] Back navigation works
-- [ ] Responsive design
-- [ ] Dark/light mode works
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Can access /onboarding/modules/company_overview
+- [x] Can access /onboarding/modules/product_overview
+- [x] Can access /onboarding/modules/competitive_landscape
+- [x] Can access /onboarding/modules/tools_systems
+- [x] Module content displays from mock data
+- [x] Navigation from dashboard works
+- [x] Content formatted nicely
+- [x] Module viewer component reusable
+- [x] Back navigation works
+- [x] Responsive design
+- [x] Dark/light mode works
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -403,7 +403,7 @@ After EVERY phase:
 - [x] Phase 1: Mock Data Setup
 - [x] Phase 2: Manager Setup Flow (UI Only)
 - [x] Phase 3: New Hire Dashboard (UI Only)
-- [ ] Phase 4: Module Content Pages
+- [x] Phase 4: Module Content Pages
 - [ ] Phase 5: Manager Progress View
 - [ ] Phase 6: Navigation & Polish
 - [ ] Phase 7: Demo Refinements & Documentation

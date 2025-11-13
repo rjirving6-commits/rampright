@@ -7,7 +7,10 @@ import TeamDirectory from "@/components/TeamDirectory";
 import WeeklyReflectionForm from "@/components/WeeklyReflectionForm";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { TrendingUp, Clock, Users, CheckCircle2 } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, Clock, Users, CheckCircle2, Building2, Package, TrendingUpIcon, Wrench, Heart, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import {
   getOnboardingPlan,
   getTasks,
@@ -15,6 +18,7 @@ import {
   calculateProgress,
   getImportantPeople,
   getReflections,
+  getAllModuleContent,
 } from "@/lib/mock-api";
 
 export default async function DashboardPage() {
@@ -35,16 +39,45 @@ export default async function DashboardPage() {
   const progress = calculateProgress(tasks);
   const importantPeople = getImportantPeople();
   const reflections = getReflections("plan-1");
+  const modules = getAllModuleContent();
 
   // Calculate metrics
-  const daysActive = onboardingPlan
-    ? Math.floor(
-        (new Date().getTime() - new Date(onboardingPlan.startDate).getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
-    : 0;
   const currentWeek = onboardingPlan?.currentWeek || 1;
   const latestReflection = reflections.length > 0 ? reflections[reflections.length - 1] : null;
+
+  // Module metadata
+  const moduleMetadata = {
+    company_overview: {
+      icon: Building2,
+      description: "Learn about our history, mission, values, and culture",
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10 hover:bg-blue-500/20",
+    },
+    product_overview: {
+      icon: Package,
+      description: "Understand our products, features, and value proposition",
+      color: "text-purple-500",
+      bgColor: "bg-purple-500/10 hover:bg-purple-500/20",
+    },
+    competitive_landscape: {
+      icon: TrendingUpIcon,
+      description: "Market positioning and competitive differentiation",
+      color: "text-orange-500",
+      bgColor: "bg-orange-500/10 hover:bg-orange-500/20",
+    },
+    tools_systems: {
+      icon: Wrench,
+      description: "Master the tools and systems you'll use daily",
+      color: "text-green-500",
+      bgColor: "bg-green-500/10 hover:bg-green-500/20",
+    },
+    team_culture: {
+      icon: Heart,
+      description: "Our team culture and ways of working",
+      color: "text-pink-500",
+      bgColor: "bg-pink-500/10 hover:bg-pink-500/20",
+    },
+  };
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
@@ -99,6 +132,46 @@ export default async function DashboardPage() {
                 trend={latestReflection && latestReflection.confidenceScore >= 7 ? "up" : "neutral"}
                 icon={TrendingUp}
               />
+            </div>
+          </section>
+
+          {/* Learning Modules Section */}
+          <section className="space-y-4">
+            <div>
+              <h2 className="text-xl font-semibold text-foreground">Learning Modules</h2>
+              <p className="text-muted-foreground text-sm">
+                Essential knowledge to help you succeed in your role
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {modules.map((module) => {
+                const metadata = moduleMetadata[module.type as keyof typeof moduleMetadata];
+                const Icon = metadata.icon;
+
+                return (
+                  <Link key={module.id} href={`/onboarding/modules/${module.type}`}>
+                    <Card className={`h-full transition-all cursor-pointer border-border hover:shadow-lg ${metadata.bgColor}`}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className={`p-2 rounded-lg bg-background/50 ${metadata.color}`}>
+                            <Icon className="h-6 w-6" />
+                          </div>
+                        </div>
+                        <CardTitle className="text-lg mt-3">{module.title}</CardTitle>
+                        <CardDescription className="text-sm">
+                          {metadata.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <Button variant="ghost" size="sm" className="w-full gap-2 group">
+                          View Module
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           </section>
 
