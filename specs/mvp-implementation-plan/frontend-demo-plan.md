@@ -27,13 +27,13 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - `calculateProgress(tasks)`
 
 ### Verification Checklist
-- [ ] Mock data file created with realistic data
-- [ ] Mock API functions return expected data
-- [ ] Week 1-4 tasks for GTM template included
-- [ ] All 5 module types have content
-- [ ] Important people list populated
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Mock data file created with realistic data
+- [x] Mock API functions return expected data
+- [x] Week 1-4 tasks for GTM template included
+- [x] All 5 module types have content
+- [x] Important people list populated
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -400,7 +400,7 @@ After EVERY phase:
 ---
 
 ## Current Status
-- [ ] Phase 1: Mock Data Setup
+- [x] Phase 1: Mock Data Setup
 - [ ] Phase 2: Manager Setup Flow (UI Only)
 - [ ] Phase 3: New Hire Dashboard (UI Only)
 - [ ] Phase 4: Module Content Pages
