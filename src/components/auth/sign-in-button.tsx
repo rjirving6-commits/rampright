@@ -16,6 +16,8 @@ export function SignInButton() {
 
   return (
     <Button
+      variant="hero"
+      size="lg"
       onClick={async () => {
         await signIn.social({
           provider: "google",

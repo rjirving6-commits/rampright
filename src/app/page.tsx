@@ -60,7 +60,7 @@ export default function Home() {
       <Hero />
 
       {/* Metrics Banner */}
-      <section className="py-16 bg-gradient-depth">
+      <section className="py-16 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:grid-cols-3">
             {metrics.map((metric, index) => (
@@ -68,7 +68,7 @@ export default function Home() {
                 <div className="text-5xl font-bold bg-gradient-warm bg-clip-text text-transparent">
                   {metric.value}
                 </div>
-                <div className="text-secondary-foreground">{metric.label}</div>
+                <div className="text-white">{metric.label}</div>
               </div>
             ))}
           </div>
@@ -153,19 +153,19 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-depth">
+      <section className="py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <div className="container mx-auto px-4 text-center space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-secondary-foreground">
+          <h2 className="text-4xl md:text-5xl font-bold text-white">
             Ready to transform your onboarding?
           </h2>
-          <p className="text-xl text-secondary-foreground/80 max-w-2xl mx-auto">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto">
             Join forward-thinking HR teams who are proving their strategic impact while helping new hires succeed from day one.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="hero" size="lg">
               Start Free Trial
             </Button>
-            <Button variant="outline" size="lg" className="bg-transparent border-secondary-foreground/20 text-secondary-foreground hover:bg-secondary-foreground/10">
+            <Button variant="outline" size="lg" className="bg-transparent border-white/20 text-white hover:bg-white/10">
               Schedule Demo
             </Button>
           </div>
