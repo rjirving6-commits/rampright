@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SetupChecklist } from "@/components/setup-checklist";
 import { useDiagnostics } from "@/hooks/use-diagnostics";
-import { StarterPromptModal } from "@/components/starter-prompt-modal";
 import { Video, Shield, Database, Palette, Bot } from "lucide-react";
 
 export default function Home() {
-  const { isAuthReady, isAiReady, loading } = useDiagnostics();
+  const { isAuthReady, loading } = useDiagnostics();
   return (
     <main className="flex-1 container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto text-center space-y-8">
@@ -92,8 +90,6 @@ export default function Home() {
         </div>
 
         <div className="space-y-6 mt-12">
-          <SetupChecklist />
-
           <h3 className="text-2xl font-semibold">Next Steps</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
             <div className="p-4 border rounded-lg">
@@ -137,25 +133,6 @@ export default function Home() {
                     <Link href="/dashboard">View Dashboard</Link>
                   </Button>
                 )}
-                {loading || !isAiReady ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    disabled={true}
-                  >
-                    Try AI Chat
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                  >
-                    <Link href="/chat">Try AI Chat</Link>
-                  </Button>
-                )}
               </div>
             </div>
             <div className="p-4 border rounded-lg">
@@ -164,7 +141,6 @@ export default function Home() {
                 Customize the components, add your own pages, and build your
                 application on top of this solid foundation.
               </p>
-              <StarterPromptModal />
             </div>
           </div>
         </div>
