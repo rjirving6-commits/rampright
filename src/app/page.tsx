@@ -121,7 +121,7 @@ export default function Home() {
               <div className="space-y-3">
                 {[
                   "Track ramp time to first milestone",
-                  "Monitor 90-day retention trends",
+                  "Monitor 60-day retention trends",
                   "Measure manager effectiveness",
                   "Analyze engagement scores"
                 ].map((item, index) => (

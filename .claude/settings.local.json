@@ -17,7 +17,8 @@
       "Bash(npm install:*)",
       "Bash(pnpm typecheck:*)",
       "Bash(pnpm add:*)",
-      "Bash(pnpm lint:*)"
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm dlx:*)"
     ],
     "additionalDirectories": [
       "C:\\c\\Projects\\nextjs-better-auth-postgresql-starter-kit"

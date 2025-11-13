@@ -185,7 +185,7 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* 90-Day Timeline Section */}
+          {/* 60-Day Timeline Section */}
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">Your 4-Week Roadmap</h2>
             <div className="grid gap-4 md:grid-cols-4">

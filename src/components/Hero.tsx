@@ -17,7 +17,7 @@ export default function Hero() {
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
               Your new hire&apos;s first{" "}
               <span className="bg-gradient-warm bg-clip-text text-transparent">
-                90 days
+                60 days
               </span>
               , done right.
             </h1>

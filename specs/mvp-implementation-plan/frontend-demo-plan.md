@@ -215,21 +215,21 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - Expandable cards per week
 
 ### Verification Checklist
-- [ ] Can access /admin/plans
-- [ ] Lists 2-3 mock onboarding plans
-- [ ] Progress bars display correctly
-- [ ] Can click into plan detail
-- [ ] Detail page shows new hire info
-- [ ] Detail page shows overall progress
-- [ ] Timeline shows week-by-week status
-- [ ] Task completion visualized clearly
-- [ ] Weekly reflections display
-- [ ] Reflection summaries readable
-- [ ] Confidence scores visualized
-- [ ] Responsive design
-- [ ] Dark/light mode works
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Can access /admin/plans
+- [x] Lists 2-3 mock onboarding plans
+- [x] Progress bars display correctly
+- [x] Can click into plan detail
+- [x] Detail page shows new hire info
+- [x] Detail page shows overall progress
+- [x] Timeline shows week-by-week status
+- [x] Task completion visualized clearly
+- [x] Weekly reflections display
+- [x] Reflection summaries readable
+- [x] Confidence scores visualized
+- [x] Responsive design
+- [x] Dark/light mode works
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -404,6 +404,6 @@ After EVERY phase:
 - [x] Phase 2: Manager Setup Flow (UI Only)
 - [x] Phase 3: New Hire Dashboard (UI Only)
 - [x] Phase 4: Module Content Pages
-- [ ] Phase 5: Manager Progress View
+- [x] Phase 5: Manager Progress View
 - [ ] Phase 6: Navigation & Polish
 - [ ] Phase 7: Demo Refinements & Documentation
