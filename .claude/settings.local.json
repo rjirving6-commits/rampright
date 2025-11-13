@@ -12,7 +12,9 @@
       "Bash(git add:*)",
       "Bash(git log:*)",
       "Bash(tree:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npm install:*)"
     ],
     "additionalDirectories": [
       "C:\\c\\Projects\\nextjs-better-auth-postgresql-starter-kit"
