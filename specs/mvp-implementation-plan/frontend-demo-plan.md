@@ -125,21 +125,21 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - Success message
 
 ### Verification Checklist
-- [ ] Dashboard loads mock onboarding plan
-- [ ] Progress percentage displays correctly
-- [ ] Tasks grouped by Week 1-4
-- [ ] Can toggle task completion (local state)
-- [ ] Task completion updates progress metric
-- [ ] Team directory shows important people
-- [ ] Team directory has avatars and roles
-- [ ] Metrics card shows real-time progress
-- [ ] Weekly reflection form opens
-- [ ] Can fill out reflection form
-- [ ] Reflection console.logs on submit
-- [ ] All components responsive
-- [ ] Dark/light mode works
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Dashboard loads mock onboarding plan
+- [x] Progress percentage displays correctly
+- [x] Tasks grouped by Week 1-4
+- [x] Can toggle task completion (local state)
+- [x] Task completion updates progress metric
+- [x] Team directory shows important people
+- [x] Team directory has avatars and roles
+- [x] Metrics card shows real-time progress
+- [x] Weekly reflection form opens
+- [x] Can fill out reflection form
+- [x] Reflection console.logs on submit
+- [x] All components responsive
+- [x] Dark/light mode works
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -402,7 +402,7 @@ After EVERY phase:
 ## Current Status
 - [x] Phase 1: Mock Data Setup
 - [x] Phase 2: Manager Setup Flow (UI Only)
-- [ ] Phase 3: New Hire Dashboard (UI Only)
+- [x] Phase 3: New Hire Dashboard (UI Only)
 - [ ] Phase 4: Module Content Pages
 - [ ] Phase 5: Manager Progress View
 - [ ] Phase 6: Navigation & Polish

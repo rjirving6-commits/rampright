@@ -5,61 +5,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Clock, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { Task } from "@/lib/mock-data";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-interface ChecklistItem {
-  id: string;
-  title: string;
-  description: string;
-  completed: boolean;
-  dueDate: string;
-  category: string;
+interface OnboardingChecklistProps {
+  tasks: Task[];
+  tasksByWeek: Record<number, Task[]>;
 }
 
-const initialTasks: ChecklistItem[] = [
-  {
-    id: "1",
-    title: "Complete company values training",
-    description: "Watch 3 short videos about our mission and culture",
-    completed: true,
-    dueDate: "Day 1",
-    category: "Culture",
-  },
-  {
-    id: "2",
-    title: "Meet your onboarding buddy",
-    description: "30-min intro call scheduled",
-    completed: true,
-    dueDate: "Day 1",
-    category: "People",
-  },
-  {
-    id: "3",
-    title: "Set up development environment",
-    description: "Install tools and access company repos",
-    completed: false,
-    dueDate: "Week 1",
-    category: "Technical",
-  },
-  {
-    id: "4",
-    title: "Review team goals and OKRs",
-    description: "Understand Q4 priorities with your manager",
-    completed: false,
-    dueDate: "Week 1",
-    category: "Strategy",
-  },
-  {
-    id: "5",
-    title: "Complete first project milestone",
-    description: "Ship your first feature or complete initial assignment",
-    completed: false,
-    dueDate: "Week 2",
-    category: "Delivery",
-  },
-];
-
-export default function OnboardingChecklist() {
-  const [tasks, setTasks] = useState<ChecklistItem[]>(initialTasks);
+export default function OnboardingChecklist({ tasks: initialTasks }: OnboardingChecklistProps) {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
   const completedCount = tasks.filter(t => t.completed).length;
   const progressPercentage = Math.round((completedCount / tasks.length) * 100);
@@ -69,6 +29,15 @@ export default function OnboardingChecklist() {
       task.id === id ? { ...task, completed: !task.completed } : task
     ));
   };
+
+  // Update tasksByWeek to reflect local state changes
+  const updatedTasksByWeek: Record<number, Task[]> = {};
+  tasks.forEach((task) => {
+    if (!updatedTasksByWeek[task.week]) {
+      updatedTasksByWeek[task.week] = [];
+    }
+    updatedTasksByWeek[task.week].push(task);
+  });
 
   return (
     <Card className="p-6 space-y-6">
@@ -97,41 +66,74 @@ export default function OnboardingChecklist() {
         </div>
       </div>
 
-      <div className="space-y-3">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className={`p-4 border rounded-lg transition-all hover:shadow-soft ${
-              task.completed ? 'bg-accent/30 border-success/20' : 'bg-card border-border'
-            }`}
-          >
-            <div className="flex items-start gap-3">
-              <Checkbox
-                checked={task.completed}
-                onCheckedChange={() => toggleTask(task.id)}
-                className="mt-1"
-              />
-              <div className="flex-1 space-y-2">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h4 className={`font-semibold ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                      {task.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+      <Accordion type="multiple" defaultValue={["week-2"]} className="space-y-3">
+        {Object.keys(updatedTasksByWeek).sort((a, b) => parseInt(a) - parseInt(b)).map((weekStr) => {
+          const week = parseInt(weekStr);
+          const weekTasks = updatedTasksByWeek[week];
+          const completedInWeek = weekTasks.filter(t => t.completed).length;
+          const totalInWeek = weekTasks.length;
+
+          return (
+            <AccordionItem key={week} value={`week-${week}`} className="border rounded-lg">
+              <AccordionTrigger className="px-4 py-3 hover:no-underline">
+                <div className="flex items-center justify-between w-full pr-4">
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline">Week {week}</Badge>
+                    <span className="font-semibold text-foreground">
+                      {week === 1 && "Foundation & Culture"}
+                      {week === 2 && "Product Deep Dive"}
+                      {week === 3 && "Customer & Market Knowledge"}
+                      {week === 4 && "Independence & First Wins"}
+                    </span>
                   </div>
-                  <Badge variant="outline" className="whitespace-nowrap">
-                    {task.category}
-                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    {completedInWeek}/{totalInWeek} tasks
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock size={14} />
-                  <span>{task.dueDate}</span>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-4">
+                <div className="space-y-3 pt-2">
+                  {weekTasks.map((task) => (
+                    <div
+                      key={task.id}
+                      className={`p-4 border rounded-lg transition-all hover:shadow-soft ${
+                        task.completed ? 'bg-accent/30 border-success/20' : 'bg-card border-border'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Checkbox
+                          checked={task.completed}
+                          onCheckedChange={() => toggleTask(task.id)}
+                          className="mt-1"
+                        />
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <h4 className={`font-semibold ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                                {task.title}
+                              </h4>
+                              <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+                            </div>
+                            <Badge variant="outline" className="whitespace-nowrap">
+                              {task.category}
+                            </Badge>
+                          </div>
+                          {task.day && (
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Clock size={14} />
+                              <span>Day {task.day}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+              </AccordionContent>
+            </AccordionItem>
+          );
+        })}
+      </Accordion>
     </Card>
   );
 }

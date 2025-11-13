@@ -4,9 +4,18 @@ import { redirect } from "next/navigation";
 import MetricsCard from "@/components/MetricsCard";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
 import TeamDirectory from "@/components/TeamDirectory";
+import WeeklyReflectionForm from "@/components/WeeklyReflectionForm";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, Clock, Users, CheckCircle2 } from "lucide-react";
+import {
+  getOnboardingPlan,
+  getTasks,
+  getTasksByWeek,
+  calculateProgress,
+  getImportantPeople,
+  getReflections,
+} from "@/lib/mock-api";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -19,6 +28,24 @@ export default async function DashboardPage() {
 
   const user = session.user;
 
+  // Get mock data for demo (hardcoded user-2 for new hire)
+  const onboardingPlan = getOnboardingPlan("user-2");
+  const tasks = getTasks("plan-1");
+  const tasksByWeek = getTasksByWeek("plan-1");
+  const progress = calculateProgress(tasks);
+  const importantPeople = getImportantPeople();
+  const reflections = getReflections("plan-1");
+
+  // Calculate metrics
+  const daysActive = onboardingPlan
+    ? Math.floor(
+        (new Date().getTime() - new Date(onboardingPlan.startDate).getTime()) /
+          (1000 * 60 * 60 * 24)
+      )
+    : 0;
+  const currentWeek = onboardingPlan?.currentWeek || 1;
+  const latestReflection = reflections.length > 0 ? reflections[reflections.length - 1] : null;
+
   return (
     <div className="min-h-screen bg-gradient-subtle">
       <div className="container mx-auto px-4 py-8">
@@ -30,11 +57,12 @@ export default async function DashboardPage() {
                 <h1 className="text-3xl md:text-4xl font-bold text-foreground">
                   Welcome back, {user.name}! 👋
                 </h1>
-                <p className="text-muted-foreground mt-1">You&apos;re crushing week 2!</p>
+                <p className="text-muted-foreground mt-1">
+                  You&apos;re crushing week {currentWeek}!
+                </p>
               </div>
               <div className="flex gap-2">
-                <Badge variant="outline">Employee View</Badge>
-                <Badge variant="secondary">Manager View</Badge>
+                <Badge variant="outline">New Hire View</Badge>
               </div>
             </div>
           </header>
@@ -45,30 +73,30 @@ export default async function DashboardPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               <MetricsCard
                 title="Days Active"
-                value="12"
-                change="+2 days this week"
+                value="9"
+                change={`Week ${currentWeek} of 4`}
                 trend="neutral"
                 icon={Clock}
               />
               <MetricsCard
                 title="Tasks Completed"
-                value="8/15"
-                change="53% completion"
-                trend="up"
+                value={`${progress.completedTasks}/${progress.totalTasks}`}
+                change={`${progress.percentage}% completion`}
+                trend={progress.percentage >= 50 ? "up" : "neutral"}
                 icon={CheckCircle2}
               />
               <MetricsCard
                 title="Team Connections"
-                value="12"
-                change="+3 this week"
+                value={importantPeople.length.toString()}
+                change="Important contacts"
                 trend="up"
                 icon={Users}
               />
               <MetricsCard
                 title="Confidence Score"
-                value="7.5/10"
-                change="+1.2 from last week"
-                trend="up"
+                value={latestReflection ? `${latestReflection.confidenceScore}/10` : "N/A"}
+                change={latestReflection ? "Latest reflection" : "No reflections yet"}
+                trend={latestReflection && latestReflection.confidenceScore >= 7 ? "up" : "neutral"}
                 icon={TrendingUp}
               />
             </div>
@@ -77,100 +105,89 @@ export default async function DashboardPage() {
           {/* Main Content Grid */}
           <div className="grid gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <OnboardingChecklist />
+              <OnboardingChecklist tasks={tasks} tasksByWeek={tasksByWeek} />
             </div>
             <div>
-              <TeamDirectory />
+              <TeamDirectory people={importantPeople} />
             </div>
           </div>
 
           {/* 90-Day Timeline Section */}
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-foreground">Your 90-Day Roadmap</h2>
-            <div className="grid gap-4 md:grid-cols-3">
-              {[
-                {
-                  phase: "Days 1-30",
-                  title: "Foundation & Culture",
-                  status: "Completed",
-                  progress: 100,
-                  milestones: [
-                    "Complete onboarding orientation",
-                    "Meet your team and manager",
-                    "Set up workspace and tools",
-                    "Learn company culture and values"
-                  ]
-                },
-                {
-                  phase: "Days 31-60",
-                  title: "Skills & Integration",
-                  status: "In Progress",
-                  progress: 60,
-                  milestones: [
-                    "Complete role-specific training",
-                    "Shadow team members",
-                    "Take on first projects",
-                    "Build cross-functional relationships"
-                  ]
-                },
-                {
-                  phase: "Days 61-90",
-                  title: "Impact & Independence",
-                  status: "Upcoming",
-                  progress: 20,
-                  milestones: [
-                    "Lead your first project",
-                    "Contribute to team goals",
-                    "Identify improvement opportunities",
-                    "Complete 90-day review"
-                  ]
-                },
-              ].map((milestone, index) => (
-                <div
-                  key={index}
-                  className="p-6 bg-card rounded-lg border border-border hover:shadow-soft transition-all"
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
-                        {milestone.phase}
-                      </Badge>
-                      <Badge
-                        variant={
-                          milestone.status === "Completed"
-                            ? "default"
-                            : milestone.status === "In Progress"
-                            ? "secondary"
-                            : "outline"
-                        }
-                        className="text-xs"
-                      >
-                        {milestone.status}
-                      </Badge>
-                    </div>
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {milestone.title}
-                    </h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Progress</span>
-                        <span className="font-medium text-foreground">
-                          {milestone.progress}%
-                        </span>
+            <h2 className="text-xl font-semibold text-foreground">Your 4-Week Roadmap</h2>
+            <div className="grid gap-4 md:grid-cols-4">
+              {[1, 2, 3, 4].map((week) => {
+                const weekProgress = progress.byWeek[week] || { total: 0, completed: 0, percentage: 0 };
+                const isCurrentWeek = week === currentWeek;
+                const isPastWeek = week < currentWeek;
+                const status = isPastWeek
+                  ? "Completed"
+                  : isCurrentWeek
+                  ? "In Progress"
+                  : "Upcoming";
+
+                return (
+                  <div
+                    key={week}
+                    className="p-6 bg-card rounded-lg border border-border hover:shadow-soft transition-all"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <Badge variant="outline" className="text-xs">
+                          Week {week}
+                        </Badge>
+                        <Badge
+                          variant={
+                            status === "Completed"
+                              ? "default"
+                              : status === "In Progress"
+                              ? "secondary"
+                              : "outline"
+                          }
+                          className="text-xs"
+                        >
+                          {status}
+                        </Badge>
                       </div>
-                      <Progress value={milestone.progress} className="h-2" />
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {week === 1 && "Foundation & Culture"}
+                        {week === 2 && "Product Deep Dive"}
+                        {week === 3 && "Customer & Market"}
+                        {week === 4 && "Independence & First Wins"}
+                      </h3>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Progress</span>
+                          <span className="font-medium text-foreground">
+                            {weekProgress.percentage}%
+                          </span>
+                        </div>
+                        <Progress value={weekProgress.percentage} className="h-2" />
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {weekProgress.completed} of {weekProgress.total} tasks completed
+                      </div>
                     </div>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      {milestone.milestones.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Weekly Reflection Section */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-foreground">
+                  Weekly Reflection
+                </h2>
+                <p className="text-muted-foreground text-sm">
+                  Share your experience and get personalized support
+                </p>
+              </div>
+            </div>
+            <div className="max-w-md p-6 bg-card rounded-lg border border-border shadow-soft">
+              <WeeklyReflectionForm planId="plan-1" week={currentWeek} />
             </div>
           </section>
         </div>
