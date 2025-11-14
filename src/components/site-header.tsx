@@ -7,6 +7,7 @@ import { Sparkles, LayoutDashboard, BookOpen, Settings, Users } from "lucide-rea
 import { Button } from "./ui/button";
 import { RoleSwitcher, useUserRole } from "./RoleSwitcher";
 import { Badge } from "./ui/badge";
+import { DemoResetButton } from "./DemoResetButton";
 
 export function SiteHeader() {
   const role = useUserRole();
@@ -66,6 +67,7 @@ export function SiteHeader() {
           </Badge>
         </div>
         <div className="flex items-center gap-2">
+          <DemoResetButton />
           <RoleSwitcher />
           <UserProfile />
           <ModeToggle />

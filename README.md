@@ -11,6 +11,62 @@ A complete agentic coding boilerplate with authentication, PostgreSQL database, 
 - **⚡ Modern Stack**: Next.js 15, React 19, TypeScript
 - **📱 Responsive**: Mobile-first design approach
 
+## 🎬 Interactive Demo
+
+### RampRight Onboarding Platform Demo
+
+This project includes a **fully functional frontend demo** of the RampRight employee onboarding platform. Experience the complete onboarding workflow without any backend setup!
+
+#### Demo Features
+
+- **👥 Dual Role Experience**: Switch between Manager and New Hire views
+- **📊 Progress Tracking**: Visual dashboards showing onboarding completion
+- **📝 Task Management**: Interactive checklists with real-time updates
+- **💡 Content Modules**: Company info, product details, competitive landscape, and tools
+- **🔄 Weekly Reflections**: Feedback collection system
+- **🎯 Smart Templates**: Pre-built onboarding plans (GTM, Engineering, Product)
+- **💾 Persistent State**: Uses localStorage to save your demo progress
+- **🔁 Reset Functionality**: Clear demo data and start fresh anytime
+
+#### Quick Demo Access
+
+**Manager Flow**: Create and customize onboarding plans
+```
+/admin/setup - Setup wizard (4-step process)
+/admin/plans - View all onboarding plans
+/admin/plans/[id] - Track individual progress
+```
+
+**New Hire Flow**: Complete onboarding tasks and access resources
+```
+/dashboard - Main onboarding dashboard
+/onboarding/modules/[type] - Learning modules
+```
+
+#### Demo Controls
+
+- **Role Switcher** (Header): Toggle between Manager and New Hire views
+- **Demo Mode Badge** (Header): Indicates you're in demo mode
+- **Reset Demo Button** (Header): Clear all demo data and start over
+
+#### Technical Details
+
+- **Frontend-Only**: No backend or database required
+- **Mock Data**: Realistic scenarios with pre-populated content
+- **localStorage**: Persists demo state across page refreshes
+- **Fully Responsive**: Works on desktop, tablet, and mobile
+
+#### Try It Now
+
+1. Start the dev server: `npm run dev`
+2. Visit `http://localhost:3000`
+3. Use the **Role Switcher** to explore both experiences
+4. Check out the [Complete Demo Guide](docs/demo-guide.md) for detailed walkthroughs
+
+📚 **[View Complete Demo Guide →](docs/demo-guide.md)**
+
+---
+
 ## 🎥 Video Tutorial
 
 Watch the complete walkthrough of this agentic coding template:

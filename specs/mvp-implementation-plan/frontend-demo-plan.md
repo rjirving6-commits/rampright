@@ -313,18 +313,18 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - Fix any visual bugs
 
 ### Verification Checklist
-- [ ] Demo reset functionality works
-- [ ] Clear localStorage clears all state
-- [ ] Demo mode indicator visible
-- [ ] Demo guide created
-- [ ] README updated
-- [ ] All manager flows work
-- [ ] All new hire flows work
-- [ ] Mobile responsive verified
-- [ ] Dark/light mode verified
-- [ ] No console errors
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Demo reset functionality works
+- [x] Clear localStorage clears all state
+- [x] Demo mode indicator visible
+- [x] Demo guide created
+- [x] README updated
+- [x] All manager flows work
+- [x] All new hire flows work
+- [x] Mobile responsive verified
+- [x] Dark/light mode verified
+- [x] No console errors
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -406,4 +406,4 @@ After EVERY phase:
 - [x] Phase 4: Module Content Pages
 - [x] Phase 5: Manager Progress View
 - [x] Phase 6: Navigation & Polish
-- [ ] Phase 7: Demo Refinements & Documentation
+- [x] Phase 7: Demo Refinements & Documentation
