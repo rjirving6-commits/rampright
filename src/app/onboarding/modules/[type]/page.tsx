@@ -5,8 +5,16 @@ import { getModuleContent } from "@/lib/mock-api";
 import { ModuleType } from "@/lib/mock-data";
 import { ModuleViewer } from "@/components/onboarding/ModuleViewer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface PageProps {
   params: Promise<{
@@ -53,8 +61,29 @@ export default async function ModulePage({ params }: PageProps) {
     notFound();
   }
 
+  // Format module type for display
+  const moduleTitle = moduleContent.title;
+
   return (
     <div className="container max-w-5xl py-8">
+      <Breadcrumb className="mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">
+              <Home className="h-4 w-4" />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{moduleTitle}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className="mb-6">
         <Link href="/dashboard">
           <Button variant="ghost" size="sm" className="gap-2">

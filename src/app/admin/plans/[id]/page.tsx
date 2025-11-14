@@ -13,10 +13,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, TrendingUp, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, TrendingUp, CheckCircle2, Clock, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ProgressTimeline } from "@/components/admin/ProgressTimeline";
 import { ReflectionSummary } from "@/components/admin/ReflectionSummary";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -48,6 +56,25 @@ export default async function PlanDetailPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto max-w-7xl space-y-8 py-8">
+      {/* Breadcrumbs */}
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">
+              <Home className="h-4 w-4" />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin/plans">Plans</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{user.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Back Button */}
       <Link href="/admin/plans">
         <Button variant="ghost" className="gap-2">

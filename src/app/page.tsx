@@ -1,6 +1,9 @@
+"use client";
+
 import Hero from "@/components/Hero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,10 +14,26 @@ import {
   BarChart3,
   Sparkles,
   ArrowRight,
-  CheckCircle2
+  CheckCircle2,
+  UserCog,
+  Play
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleDemoAccess = (role: "manager" | "new-hire") => {
+    // Store role in localStorage
+    localStorage.setItem("demo-user-role", role);
+    // Navigate to the appropriate page
+    if (role === "manager") {
+      router.push("/admin/plans");
+    } else {
+      router.push("/dashboard");
+    }
+  };
+
   const features = [
     {
       icon: Target,
@@ -147,6 +166,101 @@ export default function Home() {
                 height={800}
                 className="relative rounded-2xl shadow-medium w-full"
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Access Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            <div className="space-y-4">
+              <Badge variant="secondary" className="mb-2">
+                <Play className="h-3 w-3 mr-1" />
+                Interactive Demo
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+                Try the{" "}
+                <span className="bg-gradient-warm bg-clip-text text-transparent">
+                  live demo
+                </span>
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Experience RampRight from two perspectives: as a manager setting up onboarding plans, or as a new hire going through the journey.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
+              {/* Manager Demo Card */}
+              <Card className="p-8 space-y-6 hover:shadow-lg transition-all border-2 hover:border-primary">
+                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                  <UserCog className="text-primary" size={32} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-foreground">Manager View</h3>
+                  <p className="text-muted-foreground">
+                    Set up onboarding plans, customize content, and monitor new hire progress
+                  </p>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground text-left">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    Create custom onboarding plans
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    Track team member progress
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    Review weekly reflections
+                  </li>
+                </ul>
+                <Button
+                  onClick={() => handleDemoAccess("manager")}
+                  className="w-full"
+                  size="lg"
+                >
+                  Explore as Manager
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Card>
+
+              {/* New Hire Demo Card */}
+              <Card className="p-8 space-y-6 hover:shadow-lg transition-all border-2 hover:border-primary">
+                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                  <Users className="text-primary" size={32} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-foreground">New Hire View</h3>
+                  <p className="text-muted-foreground">
+                    Experience the onboarding journey with tasks, learning modules, and reflections
+                  </p>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground text-left">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    Complete onboarding checklist
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    Access learning modules
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                    Submit weekly reflections
+                  </li>
+                </ul>
+                <Button
+                  onClick={() => handleDemoAccess("new-hire")}
+                  className="w-full"
+                  size="lg"
+                >
+                  Explore as New Hire
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Card>
             </div>
           </div>
         </div>

@@ -140,6 +140,7 @@
   }
   html {
     font-size: 18px;
+    scroll-behavior: smooth;
   }
   @media (max-width: 640px) {
     html {
@@ -148,5 +149,51 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Smooth transitions for interactive elements */
+  a, button, [role="button"] {
+    @apply transition-colors duration-200;
+  }
+
+  /* Card hover effects */
+  [class*="card"] {
+    @apply transition-shadow duration-300;
+  }
+
+  /* Fade in animation for page content */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide in from left */
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Slide in from right */
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }

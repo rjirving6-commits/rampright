@@ -266,21 +266,21 @@ Build the frontend UI for the onboarding MVP using mock data for demo purposes. 
    - Sample data preview
 
 ### Verification Checklist
-- [ ] Header shows role-based links
-- [ ] Role switcher works (Manager ↔ New Hire)
-- [ ] Navigation persists across pages
-- [ ] Breadcrumbs display on relevant pages
-- [ ] All pages have consistent styling
-- [ ] Loading states implemented
-- [ ] Empty states look good
-- [ ] Transitions smooth
-- [ ] Homepage has demo CTA
-- [ ] Can quickly switch roles
-- [ ] All links work correctly
-- [ ] Mobile navigation works
-- [ ] Dark/light mode consistent
-- [ ] No TypeScript errors: `pnpm typecheck`
-- [ ] No lint errors: `pnpm lint`
+- [x] Header shows role-based links
+- [x] Role switcher works (Manager ↔ New Hire)
+- [x] Navigation persists across pages
+- [x] Breadcrumbs display on relevant pages
+- [x] All pages have consistent styling
+- [x] Loading states implemented
+- [x] Empty states look good
+- [x] Transitions smooth
+- [x] Homepage has demo CTA
+- [x] Can quickly switch roles
+- [x] All links work correctly
+- [x] Mobile navigation works
+- [x] Dark/light mode consistent
+- [x] No TypeScript errors: `pnpm typecheck`
+- [x] No lint errors: `pnpm lint`
 
 ---
 
@@ -405,5 +405,5 @@ After EVERY phase:
 - [x] Phase 3: New Hire Dashboard (UI Only)
 - [x] Phase 4: Module Content Pages
 - [x] Phase 5: Manager Progress View
-- [ ] Phase 6: Navigation & Polish
+- [x] Phase 6: Navigation & Polish
 - [ ] Phase 7: Demo Refinements & Documentation

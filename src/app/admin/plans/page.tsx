@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowRight, Users } from "lucide-react";
+import { ArrowRight, Users, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default function AdminPlansPage() {
   const plans = getAllOnboardingPlans();
@@ -65,8 +66,19 @@ export default function AdminPlansPage() {
       {/* Plans List */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">All Plans</h2>
-        <div className="space-y-4">
-          {plans.map((plan) => {
+        {plans.length === 0 ? (
+          <EmptyState
+            icon={UserPlus}
+            title="No onboarding plans yet"
+            description="Create your first onboarding plan to help new hires get started and track their progress."
+            action={{
+              label: "Create Onboarding Plan",
+              href: "/admin/setup",
+            }}
+          />
+        ) : (
+          <div className="space-y-4">
+            {plans.map((plan) => {
             const user = getUser(plan.userId);
             const tasks = getTasks(plan.id);
             const progress = calculateProgress(tasks);
@@ -160,7 +172,8 @@ export default function AdminPlansPage() {
               </Card>
             );
           })}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
