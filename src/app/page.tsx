@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import Hero from "@/components/Hero";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,63 +14,57 @@ import {
   BarChart3,
   Sparkles,
   ArrowRight,
-  CheckCircle2,
-  UserCog,
-  Play
+  CheckCircle2
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const router = useRouter();
-
-  const handleDemoAccess = (role: "manager" | "new-hire") => {
-    // Store role in localStorage
-    localStorage.setItem("demo-user-role", role);
-    // Navigate to the appropriate page
-    if (role === "manager") {
-      router.push("/admin/plans");
-    } else {
-      router.push("/dashboard");
+  // Clean up any demo-related localStorage keys on page load
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("demo-user-role");
+      localStorage.removeItem("demo-task-completions");
+      localStorage.removeItem("demo-reflections");
+      localStorage.removeItem("demo-setup-data");
     }
-  };
+  }, []);
 
   const features = [
     {
       icon: Target,
-      title: "Personalized Journeys",
-      description: "Auto-generated onboarding checklists by role, department, and location with smart timelines."
-    },
-    {
-      icon: Users,
-      title: "Team Collaboration",
-      description: "Built-in buddy pairing, manager dashboards, and automated feedback check-ins."
-    },
-    {
-      icon: Clock,
-      title: "Progress Tracking",
-      description: "Real-time ramp tracking with skill checklists and milestone visibility for employees and managers."
+      title: "Create custom onboarding plans in minutes",
+      description: "Build personalized onboarding journeys by role, department, and location with smart timelines and automated task assignment."
     },
     {
       icon: BarChart3,
-      title: "Impact Analytics",
-      description: "Prove HR's value with metrics on ramp time, completion rates, and retention trends."
+      title: "Track progress across all new hires",
+      description: "Real-time dashboards show completion rates, ramp time, and milestone progress across your entire team."
     },
     {
       icon: Sparkles,
-      title: "Culture Integration",
-      description: "Mission, values, and company 101 content in engaging micro-learning formats."
+      title: "Automated weekly check-ins and reflections",
+      description: "Pulse surveys at key intervals with confidence tracking and sentiment analysis to catch issues early."
+    },
+    {
+      icon: Users,
+      title: "Centralized resources and key contacts",
+      description: "Built-in buddy pairing, manager dashboards, and team directory so new hires always know who to ask."
     },
     {
       icon: TrendingUp,
-      title: "Continuous Feedback",
-      description: "Pulse surveys at key intervals with confidence tracking and sentiment analysis."
+      title: "Prove HR's strategic impact",
+      description: "Analytics on ramp time, completion rates, retention trends, and manager effectiveness to show leadership your value."
+    },
+    {
+      icon: Clock,
+      title: "Culture integration made easy",
+      description: "Mission, values, and company 101 content delivered in engaging micro-learning formats."
     }
   ];
 
   const metrics = [
-    { value: "25%", label: "Faster ramp time" },
-    { value: "10%", label: "Better retention" },
-    { value: "90%", label: "Completion rate" }
+    { value: "50%", label: "Faster time-to-productivity" },
+    { value: "90%", label: "New hire satisfaction" },
+    { value: "0", label: "Onboarding tasks forgotten" }
   ];
 
   return (
@@ -105,7 +99,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-base sm:text-xl text-muted-foreground">
-              From day one to full productivity, guide every new hire with personalized experiences and data-driven insights.
+              From day one to full productivity, guide every new hire with structured onboarding and data-driven insights.
             </p>
           </div>
 
@@ -150,9 +144,9 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link href="/dashboard">
+              <Link href="/admin/setup">
                 <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                  Explore Dashboard
+                  Get Started
                   <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -171,101 +165,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Demo Access Section */}
-      <section className="py-16 sm:py-24 bg-background">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
-            <div className="space-y-3 sm:space-y-4">
-              <Badge variant="secondary" className="mb-2">
-                <Play className="h-3 w-3 mr-1" />
-                Interactive Demo
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
-                Try the{" "}
-                <span className="bg-gradient-warm bg-clip-text text-transparent">
-                  live demo
-                </span>
-              </h2>
-              <p className="text-base sm:text-xl text-muted-foreground">
-                Experience RampRight from two perspectives: as a manager setting up onboarding plans, or as a new hire going through the journey.
-              </p>
-            </div>
-
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto">
-              {/* Manager Demo Card */}
-              <Card className="p-8 space-y-6 hover:shadow-lg transition-all border-2 hover:border-primary">
-                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
-                  <UserCog className="text-primary" size={32} />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-foreground">Manager View</h3>
-                  <p className="text-muted-foreground">
-                    Set up onboarding plans, customize content, and monitor new hire progress
-                  </p>
-                </div>
-                <ul className="space-y-2 text-sm text-muted-foreground text-left">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    Create custom onboarding plans
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    Track team member progress
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    Review weekly reflections
-                  </li>
-                </ul>
-                <Button
-                  onClick={() => handleDemoAccess("manager")}
-                  className="w-full"
-                  size="lg"
-                >
-                  Explore as Manager
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Card>
-
-              {/* New Hire Demo Card */}
-              <Card className="p-8 space-y-6 hover:shadow-lg transition-all border-2 hover:border-primary">
-                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
-                  <Users className="text-primary" size={32} />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-foreground">New Hire View</h3>
-                  <p className="text-muted-foreground">
-                    Experience the onboarding journey with tasks, learning modules, and reflections
-                  </p>
-                </div>
-                <ul className="space-y-2 text-sm text-muted-foreground text-left">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    Complete onboarding checklist
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    Access learning modules
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    Submit weekly reflections
-                  </li>
-                </ul>
-                <Button
-                  onClick={() => handleDemoAccess("new-hire")}
-                  className="w-full"
-                  size="lg"
-                >
-                  Explore as New Hire
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-16 sm:py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
         <div className="container mx-auto px-4 sm:px-6 text-center space-y-6 sm:space-y-8">
@@ -276,9 +175,11 @@ export default function Home() {
             Join forward-thinking HR teams who are proving their strategic impact while helping new hires succeed from day one.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="hero" size="lg">
-              Start Free Trial
-            </Button>
+            <Link href="/admin/setup">
+              <Button variant="hero" size="lg">
+                Create Your First Plan
+              </Button>
+            </Link>
             <Button variant="outline" size="lg" className="bg-transparent border-white/20 text-white hover:bg-white/10">
               Schedule Demo
             </Button>

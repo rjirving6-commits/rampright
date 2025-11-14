@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -27,10 +28,12 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Button variant="hero" size="lg" className="group w-full sm:w-auto">
-                Get Started
-                <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href="/admin/setup">
+                <Button variant="hero" size="lg" className="group w-full sm:w-auto">
+                  Get Started
+                  <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 See How It Works
               </Button>

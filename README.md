@@ -1,146 +1,60 @@
-# Agentic Coding Boilerplate
+# RampRight - Employee Onboarding Platform
 
-A complete agentic coding boilerplate with authentication, PostgreSQL database, AI chat functionality, and modern UI components - perfect for building AI-powered applications and autonomous agents.
+A modern employee onboarding platform designed for HR managers and hiring managers to create structured, trackable onboarding experiences that help new hires succeed from day one.
+
+## 🎯 Overview
+
+RampRight helps HR teams transform onboarding from paperwork chaos into a strategic advantage. Create custom onboarding plans, track progress across all new hires, and prove your impact with data-driven analytics.
+
+### For HR Managers
+
+- **Create custom onboarding plans in minutes** - Build personalized journeys by role, department, and location
+- **Track progress across all new hires** - Real-time dashboards show completion rates and milestone progress
+- **Automated weekly check-ins** - Pulse surveys capture feedback and catch issues early
+- **Centralized resources** - Company info, team directory, and key contacts in one place
+- **Prove HR's strategic impact** - Analytics on ramp time, completion rates, and retention
+
+### For New Hires
+
+- **Structured onboarding checklist** - Clear tasks organized by week with completion tracking
+- **Learning modules** - Company overview, product info, competitive landscape, and tools
+- **Team directory** - Know who to ask for help with photos, titles, and contact info
+- **Weekly reflections** - Share progress, challenges, and questions with your manager
 
 ## 🚀 Features
 
 - **🔐 Authentication**: Better Auth with Google OAuth integration
-- **🗃️ Database**: Drizzle ORM with PostgreSQL
-- **🤖 AI Integration**: Vercel AI SDK with OpenRouter (access to 100+ AI models)
-- **🎨 UI Components**: shadcn/ui with Tailwind CSS
+- **🗃️ Database**: Drizzle ORM with PostgreSQL for production data storage
+- **🎨 UI Components**: shadcn/ui with Tailwind CSS and dark mode support
 - **⚡ Modern Stack**: Next.js 15, React 19, TypeScript
-- **📱 Responsive**: Mobile-first design approach
-
-## 🎬 Interactive Demo
-
-### RampRight Onboarding Platform Demo
-
-This project includes a **fully functional frontend demo** of the RampRight employee onboarding platform. Experience the complete onboarding workflow without any backend setup!
-
-#### Demo Features
-
-- **👥 Dual Role Experience**: Switch between Manager and New Hire views
-- **📊 Progress Tracking**: Visual dashboards showing onboarding completion
-- **📝 Task Management**: Interactive checklists with real-time updates
-- **💡 Content Modules**: Company info, product details, competitive landscape, and tools
-- **🔄 Weekly Reflections**: Feedback collection system
-- **🎯 Smart Templates**: Pre-built onboarding plans (GTM, Engineering, Product)
-- **💾 Persistent State**: Uses localStorage to save your demo progress
-- **🔁 Reset Functionality**: Clear demo data and start fresh anytime
-
-#### Quick Demo Access
-
-**Manager Flow**: Create and customize onboarding plans
-```
-/admin/setup - Setup wizard (4-step process)
-/admin/plans - View all onboarding plans
-/admin/plans/[id] - Track individual progress
-```
-
-**New Hire Flow**: Complete onboarding tasks and access resources
-```
-/dashboard - Main onboarding dashboard
-/onboarding/modules/[type] - Learning modules
-```
-
-#### Demo Controls
-
-- **Role Switcher** (Header): Toggle between Manager and New Hire views
-- **Demo Mode Badge** (Header): Indicates you're in demo mode
-- **Reset Demo Button** (Header): Clear all demo data and start over
-
-#### Technical Details
-
-- **Frontend-Only**: No backend or database required
-- **Mock Data**: Realistic scenarios with pre-populated content
-- **localStorage**: Persists demo state across page refreshes
-- **Fully Responsive**: Works on desktop, tablet, and mobile
-
-#### Try It Now
-
-1. Start the dev server: `npm run dev`
-2. Visit `http://localhost:3000`
-3. Use the **Role Switcher** to explore both experiences
-4. Check out the [Complete Demo Guide](docs/demo-guide.md) for detailed walkthroughs
-
-📚 **[View Complete Demo Guide →](docs/demo-guide.md)**
-
----
-
-## 🎥 Video Tutorial
-
-Watch the complete walkthrough of this agentic coding template:
-
-[![Agentic Coding Boilerplate Tutorial](https://img.youtube.com/vi/T0zFZsr_d0Q/maxresdefault.jpg)](https://youtu.be/T0zFZsr_d0Q)
-
-<a href="https://youtu.be/T0zFZsr_d0Q" target="_blank" rel="noopener noreferrer">🔗 Watch on YouTube</a>
-
-## ☕ Support This Project
-
-If this boilerplate helped you build something awesome, consider buying me a coffee!
-
-[![Buy me a coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/leonvanzyl)
+- **📱 Responsive**: Mobile-first design that works on all devices
+- **📊 Analytics**: Track onboarding progress and measure success
 
 ## 📋 Prerequisites
 
-Before you begin, ensure you have the following installed on your machine:
+Before you begin, ensure you have the following installed:
 
-- **Node.js**: Version 18.0 or higher (<a href="https://nodejs.org/" target="_blank">Download here</a>)
-- **Git**: For cloning the repository (<a href="https://git-scm.com/" target="_blank">Download here</a>)
+- **Node.js**: Version 18.0 or higher ([Download here](https://nodejs.org/))
+- **pnpm**: Package manager (`npm install -g pnpm`)
+- **Git**: For cloning the repository ([Download here](https://git-scm.com/))
 - **PostgreSQL**: Either locally installed or access to a hosted service like Vercel Postgres
 
 ## 🛠️ Quick Setup
 
-### Automated Setup (Recommended)
-
-Get started with a single command:
+### 1. Clone the Repository
 
 ```bash
-npx create-agentic-app@latest my-app
-cd my-app
+git clone https://github.com/yourusername/rampright.git
+cd rampright
 ```
 
-Or create in the current directory:
+### 2. Install Dependencies
 
 ```bash
-npx create-agentic-app@latest .
+pnpm install
 ```
 
-The CLI will:
-- Copy all boilerplate files
-- Install dependencies with your preferred package manager (pnpm/npm/yarn)
-- Set up your environment file
-
-**Next steps after running the command:**
-
-1. Update `.env` with your API keys and database credentials
-2. Start the database: `docker compose up -d`
-3. Run migrations: `npm run db:migrate`
-4. Start dev server: `npm run dev`
-
-### Manual Setup (Alternative)
-
-If you prefer to set up manually:
-
-**1. Clone or Download the Repository**
-
-**Option A: Clone with Git**
-
-```bash
-git clone https://github.com/leonvanzyl/agentic-coding-starter-kit.git
-cd agentic-coding-starter-kit
-```
-
-**Option B: Download ZIP**
-Download the repository as a ZIP file and extract it to your desired location.
-
-**2. Install Dependencies**
-
-```bash
-npm install
-```
-
-**3. Environment Setup**
+### 3. Environment Setup
 
 Copy the example environment file:
 
@@ -152,7 +66,7 @@ Fill in your environment variables in the `.env` file:
 
 ```env
 # Database
-POSTGRES_URL="postgresql://username:password@localhost:5432/your_database_name"
+POSTGRES_URL="postgresql://username:password@localhost:5432/rampright"
 
 # Authentication - Better Auth
 BETTER_AUTH_SECRET="your-random-32-character-secret-key-here"
@@ -161,38 +75,74 @@ BETTER_AUTH_SECRET="your-random-32-character-secret-key-here"
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
-# AI Integration via OpenRouter (Optional - for chat functionality)
-# Get your API key from: https://openrouter.ai/settings/keys
-# View available models at: https://openrouter.ai/models
-OPENROUTER_API_KEY="sk-or-v1-your-openrouter-api-key-here"
-OPENROUTER_MODEL="openai/gpt-5-mini"
-
-# App URL (for production deployments)
+# App URL
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-**4. Database Setup**
+### 4. Database Setup
 
 Generate and run database migrations:
 
 ```bash
-npm run db:generate
-npm run db:migrate
+pnpm run db:generate
+pnpm run db:migrate
 ```
 
-**5. Start the Development Server**
+### 5. Start the Development Server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Your application will be available at [http://localhost:3000](http://localhost:3000)
+
+## 🎓 Getting Started for HR Managers
+
+### First Time Setup
+
+1. **Sign Up** - Visit the landing page and click "Get Started"
+2. **Authenticate** - Sign in with your Google account
+3. **Complete Setup Wizard** - Follow the 4-step process to:
+   - Create your company profile
+   - Add company information (overview, product, tools, culture)
+   - Add important people (managers, buddies, team members)
+   - Review and confirm your setup
+
+### Creating Your First Onboarding Plan
+
+After completing setup, you can create onboarding plans for new hires:
+
+1. Navigate to `/admin/plans`
+2. Click "Create New Plan"
+3. Select the new hire and configure their onboarding timeline
+4. Tasks are automatically generated based on your company setup
+5. Track progress as the new hire completes their onboarding
+
+### Managing Onboarding Plans
+
+- **View All Plans** - `/admin/plans` shows all active onboarding plans
+- **Track Progress** - See completion percentages and current week
+- **Review Reflections** - Read weekly feedback from new hires
+- **Update Content** - Edit company info, people, and resources anytime
+
+## 👥 How New Hires Access the Platform
+
+> **Note**: Full email invitation system coming in Phase 3 of production migration
+
+Currently, new hires can access their onboarding dashboard after authentication:
+
+1. New hire signs in with their Google account
+2. System checks for an assigned onboarding plan
+3. If a plan exists, they're directed to `/dashboard`
+4. Dashboard shows their personalized onboarding checklist, resources, and team directory
+
+**Coming Soon**: Automated email invitations with direct links to onboarding dashboard
 
 ## ⚙️ Service Configuration
 
 ### PostgreSQL Database on Vercel
 
-1. Go to <a href="https://vercel.com/dashboard" target="_blank">Vercel Dashboard</a>
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
 2. Navigate to the **Storage** tab
 3. Click **Create** → **Postgres**
 4. Choose your database name and region
@@ -201,7 +151,7 @@ Your application will be available at [http://localhost:3000](http://localhost:3
 
 ### Google OAuth Credentials
 
-1. Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
 3. Navigate to **Credentials** → **Create Credentials** → **OAuth 2.0 Client ID**
 4. Set application type to **Web application**
@@ -210,94 +160,94 @@ Your application will be available at [http://localhost:3000](http://localhost:3
    - `https://yourdomain.com/api/auth/callback/google` (production)
 6. Copy the **Client ID** and **Client Secret** to your `.env` file
 
-### OpenRouter API Key
-
-1. Go to <a href="https://openrouter.ai/" target="_blank">OpenRouter</a>
-2. Sign up or log in to your account
-3. Navigate to **Settings** → **Keys** or visit <a href="https://openrouter.ai/settings/keys" target="_blank">Keys Settings</a>
-4. Click **Create Key** and give it a name
-5. Copy the API key and add it to your `.env` file as `OPENROUTER_API_KEY`
-6. Browse available models at <a href="https://openrouter.ai/models" target="_blank">OpenRouter Models</a>
-
 ## 🗂️ Project Structure
 
 ```
 src/
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   │   ├── auth/          # Authentication endpoints
-│   │   └── chat/          # AI chat endpoint
-│   ├── chat/              # AI chat page
-│   ├── dashboard/         # User dashboard
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── auth/             # Authentication components
-│   └── ui/               # shadcn/ui components
-└── lib/                  # Utilities and configurations
-    ├── auth.ts           # Better Auth configuration
-    ├── auth-client.ts    # Client-side auth utilities
-    ├── db.ts             # Database connection
-    ├── schema.ts         # Database schema
-    └── utils.ts          # General utilities
+├── app/                          # Next.js App Router
+│   ├── api/                      # API routes
+│   │   ├── auth/[...all]/       # Better Auth catch-all route
+│   │   └── diagnostics/         # System diagnostics
+│   ├── admin/                   # Manager/Admin pages
+│   │   ├── setup/               # Setup wizard
+│   │   └── plans/               # Plan management
+│   ├── dashboard/               # New hire dashboard
+│   └── onboarding/              # Onboarding modules
+├── components/                  # React components
+│   ├── admin/                   # Admin-specific components
+│   ├── auth/                    # Authentication components
+│   ├── onboarding/              # Onboarding flow components
+│   └── ui/                      # shadcn/ui components
+└── lib/                         # Utilities and configurations
+    ├── auth.ts                  # Better Auth server config
+    ├── auth-client.ts           # Client-side auth utilities
+    ├── db.ts                    # Database connection
+    ├── schema.ts                # Database schema
+    └── utils.ts                 # General utilities
 ```
 
 ## 🔧 Available Scripts
 
 ```bash
-npm run dev          # Start development server with Turbopack
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run db:generate  # Generate database migrations
-npm run db:migrate   # Run database migrations
-npm run db:push      # Push schema changes to database
-npm run db:studio    # Open Drizzle Studio (database GUI)
-npm run db:dev       # Push schema for development
-npm run db:reset     # Reset database (drop all tables)
+pnpm run dev          # Start development server
+pnpm run build        # Build for production (runs db:migrate first)
+pnpm run start        # Start production server
+pnpm run lint         # Run ESLint
+pnpm run typecheck    # TypeScript type checking
+pnpm run db:generate  # Generate database migrations
+pnpm run db:migrate   # Run database migrations
+pnpm run db:push      # Push schema changes to database
+pnpm run db:studio    # Open Drizzle Studio (database GUI)
+pnpm run db:dev       # Push schema for development
+pnpm run db:reset     # Reset database (drop all tables)
 ```
 
 ## 📖 Pages Overview
 
-- **Home (`/`)**: Landing page with setup instructions and features overview
-- **Dashboard (`/dashboard`)**: Protected user dashboard with profile information
-- **Chat (`/chat`)**: AI-powered chat interface using OpenRouter (requires authentication)
+### Public Pages
+- **Home (`/`)** - Landing page with features and "Get Started" CTA
+- **Sign In** - Google OAuth authentication
+
+### HR Manager Pages
+- **Setup Wizard (`/admin/setup`)** - First-time company setup (4 steps)
+- **Plans Overview (`/admin/plans`)** - View all onboarding plans
+- **Plan Details (`/admin/plans/[id]`)** - Track individual new hire progress
+
+### New Hire Pages
+- **Dashboard (`/dashboard`)** - Main onboarding hub with checklist and resources
+- **Learning Modules (`/onboarding/modules/[type]`)** - Company info, product, tools, etc.
 
 ## 🚀 Deployment
 
 ### Deploy to Vercel (Recommended)
 
-1. Install the Vercel CLI globally:
+1. Push your code to GitHub
+2. Import project in [Vercel Dashboard](https://vercel.com/new)
+3. Configure environment variables:
+   - `POSTGRES_URL` - Production PostgreSQL connection string
+   - `BETTER_AUTH_SECRET` - Secure random 32+ character string
+   - `GOOGLE_CLIENT_ID` - Google OAuth Client ID
+   - `GOOGLE_CLIENT_SECRET` - Google OAuth Client Secret
+   - `NEXT_PUBLIC_APP_URL` - Your production domain
+4. Deploy!
 
-   ```bash
-   npm install -g vercel
-   ```
+### Production Checklist
 
-2. Deploy your application:
+Before deploying to production:
 
-   ```bash
-   vercel --prod
-   ```
+- [ ] Database migrations applied (`pnpm run db:migrate`)
+- [ ] Environment variables configured in Vercel
+- [ ] Google OAuth redirect URIs updated for production domain
+- [ ] Test authentication flow
+- [ ] Test setup wizard end-to-end
+- [ ] Verify onboarding plan creation
 
-3. Follow the prompts to configure your deployment
-4. Add your environment variables when prompted or via the Vercel dashboard
+## 📚 Documentation
 
-### Production Environment Variables
-
-Ensure these are set in your production environment:
-
-- `POSTGRES_URL` - Production PostgreSQL connection string
-- `BETTER_AUTH_SECRET` - Secure random 32+ character string
-- `GOOGLE_CLIENT_ID` - Google OAuth Client ID
-- `GOOGLE_CLIENT_SECRET` - Google OAuth Client Secret
-- `OPENROUTER_API_KEY` - OpenRouter API key (optional, for AI chat functionality)
-- `OPENROUTER_MODEL` - Model name from OpenRouter (optional, defaults to openai/gpt-5-mini)
-- `NEXT_PUBLIC_APP_URL` - Your production domain
-
-## 🎥 Tutorial Video
-
-Watch my comprehensive tutorial on how to use this agentic coding boilerplate to build AI-powered applications:
-
-<a href="https://youtu.be/T0zFZsr_d0Q" target="_blank" rel="noopener noreferrer">📺 YouTube Tutorial - Building with Agentic Coding Boilerplate</a>
+- **Database Schema** - Coming in Phase 3
+- **API Reference** - Coming in Phase 3
+- **Better Auth Guide** - `docs/technical/betterauth/`
+- **AI Integration** - `docs/technical/ai/`
 
 ## 🤝 Contributing
 
@@ -315,10 +265,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues:
 
-1. Check the [Issues](https://github.com/leonvanzyl/agentic-coding-starter-kit/issues) section
-2. Review the documentation above
-3. Create a new issue with detailed information about your problem
+1. Check the documentation in the `docs/` folder
+2. Review existing issues on GitHub
+3. Create a new issue with detailed information
 
 ---
 
-**Happy coding! 🚀**
+**Built with ❤️ for HR teams who want to make onboarding right**

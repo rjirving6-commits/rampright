@@ -43,69 +43,69 @@ Refocus landing page on HR/hiring managers, remove all demo UI components, and c
 ### Part A: Landing Page Refactor
 
 #### File: `src/app/page.tsx`
-- [ ] Remove demo access cards section (Manager View / New Hire View)
-- [ ] Delete `handleDemoAccess()` function
-- [ ] Remove localStorage demo role logic
-- [ ] Update hero section copy to target HR/hiring managers
-  - [ ] Change headline to manager-focused messaging
-  - [ ] Update subheading to emphasize structured onboarding
-- [ ] Update feature highlights section
-  - [ ] "Create custom onboarding plans in minutes"
-  - [ ] "Track progress across all new hires"
-  - [ ] "Automated weekly check-ins and reflections"
-  - [ ] "Centralized resources and key contacts"
-- [ ] Update primary CTA button to route to `/admin/setup`
-- [ ] Update CTA button text to "Get Started" or "Create Your First Plan"
-- [ ] Add localStorage cleanup for demo keys on page load:
+- [x] Remove demo access cards section (Manager View / New Hire View)
+- [x] Delete `handleDemoAccess()` function
+- [x] Remove localStorage demo role logic
+- [x] Update hero section copy to target HR/hiring managers
+  - [x] Change headline to manager-focused messaging
+  - [x] Update subheading to emphasize structured onboarding
+- [x] Update feature highlights section
+  - [x] "Create custom onboarding plans in minutes"
+  - [x] "Track progress across all new hires"
+  - [x] "Automated weekly check-ins and reflections"
+  - [x] "Centralized resources and key contacts"
+- [x] Update primary CTA button to route to `/admin/setup`
+- [x] Update CTA button text to "Get Started" or "Create Your First Plan"
+- [x] Add localStorage cleanup for demo keys on page load:
   ```typescript
   localStorage.removeItem('demo-user-role');
   localStorage.removeItem('demo-task-completions');
   localStorage.removeItem('demo-reflections');
   localStorage.removeItem('demo-setup-data');
   ```
-- [ ] Update metrics/stats to be HR-focused
-  - [ ] "50% faster time-to-productivity"
-  - [ ] "90% new hire satisfaction"
-  - [ ] "Zero onboarding tasks forgotten"
+- [x] Update metrics/stats to be HR-focused
+  - [x] "50% faster time-to-productivity"
+  - [x] "90% new hire satisfaction"
+  - [x] "Zero onboarding tasks forgotten"
 
 ### Part B: Navigation Header Update
 
 #### File: `src/components/site-header.tsx`
-- [ ] Update "Sign Up" or "Get Started" button to route to `/admin/setup`
-- [ ] Remove any "Dashboard" or "New Hire" links from public navigation
-- [ ] Update authenticated state routing logic:
-  - [ ] No company → redirect to `/admin/setup`
-  - [ ] Has company, is admin → redirect to `/admin/plans`
-  - [ ] Has plan, is new hire → redirect to `/dashboard`
-- [ ] Ensure proper auth state checks
+- [x] Update "Sign Up" or "Get Started" button to route to `/admin/setup`
+- [x] Remove any "Dashboard" or "New Hire" links from public navigation
+- [x] Update authenticated state routing logic:
+  - [x] No company → redirect to `/admin/setup`
+  - [x] Has company, is admin → redirect to `/admin/plans`
+  - [x] Has plan, is new hire → redirect to `/dashboard`
+- [x] Ensure proper auth state checks
 
 ### Part C: Delete Demo Components
 
-- [ ] Delete `src/components/DemoResetButton.tsx`
-- [ ] Delete `src/components/RoleSwitcher.tsx`
-- [ ] Search codebase for imports of deleted components
-- [ ] Remove any imports from:
-  - [ ] `src/app/layout.tsx`
-  - [ ] `src/components/site-header.tsx`
-  - [ ] Any admin layout files
+- [x] Delete `src/components/DemoResetButton.tsx`
+- [x] Delete `src/components/RoleSwitcher.tsx`
+- [x] Search codebase for imports of deleted components
+- [x] Remove any imports from:
+  - [x] `src/app/layout.tsx`
+  - [x] `src/components/site-header.tsx`
+  - [x] Any admin layout files
 
 ### Part D: Documentation Cleanup
 
-- [ ] Delete `docs/demo-guide.md`
-- [ ] Update `README.md`:
-  - [ ] Remove demo instructions
-  - [ ] Add HR manager focus in overview
-  - [ ] Update getting started section
-  - [ ] Add placeholder for "How to invite new hires" (Phase 3)
+- [x] Delete `docs/demo-guide.md`
+- [x] Update `README.md`:
+  - [x] Remove demo instructions
+  - [x] Add HR manager focus in overview
+  - [x] Update getting started section
+  - [x] Add placeholder for "How to invite new hires" (Phase 3)
 
 ### Verification
-- [ ] Landing page shows HR/manager-focused messaging
-- [ ] No demo UI elements visible anywhere
-- [ ] "Get Started" CTA routes to `/admin/setup`
-- [ ] localStorage demo keys are cleaned up
-- [ ] Run `npm run lint` - passes with no errors
-- [ ] Run `npm run typecheck` - passes with no errors
-- [ ] Visual inspection: landing page looks professional for B2B audience
+- [x] Landing page shows HR/manager-focused messaging
+- [x] No demo UI elements visible anywhere
+- [x] "Get Started" CTA routes to `/admin/setup`
+- [x] localStorage demo keys are cleaned up
+- [x] Run `npm run lint` - passes with no errors
+- [x] Run `npm run typecheck` - passes with no errors
+- [x] Visual inspection: landing page looks professional for B2B audience
 
 ---
 

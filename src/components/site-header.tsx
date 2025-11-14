@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { UserProfile } from "@/components/auth/user-profile";
-import { Sparkles, LayoutDashboard, BookOpen, Settings, Users } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
+import { Sparkles, LayoutDashboard, Settings, Users } from "lucide-react";
 import { Button } from "./ui/button";
-import { RoleSwitcher, useUserRole } from "./RoleSwitcher";
-import { Badge } from "./ui/badge";
-import { DemoResetButton } from "./DemoResetButton";
+import { ModeToggle } from "./ui/mode-toggle";
 
 export function SiteHeader() {
-  const role = useUserRole();
+  const { data: session } = useSession();
 
   return (
     <header className="border-b">
@@ -29,46 +28,31 @@ export function SiteHeader() {
                 </span>
               </Link>
             </h1>
-            <nav className="hidden md:flex items-center gap-2">
-              {role === "new-hire" ? (
-                <>
-                  <Link href="/dashboard">
-                    <Button variant="ghost" size="sm">
-                      <LayoutDashboard className="h-4 w-4 mr-2" />
-                      Dashboard
-                    </Button>
-                  </Link>
-                  <Link href="/onboarding/modules/company_overview">
-                    <Button variant="ghost" size="sm">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Modules
-                    </Button>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link href="/admin/setup">
-                    <Button variant="ghost" size="sm">
-                      <Settings className="h-4 w-4 mr-2" />
-                      Setup
-                    </Button>
-                  </Link>
-                  <Link href="/admin/plans">
-                    <Button variant="ghost" size="sm">
-                      <Users className="h-4 w-4 mr-2" />
-                      Plans
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </nav>
-            <Badge variant="secondary" className="hidden lg:flex">
-              Demo Mode
-            </Badge>
+            {session && (
+              <nav className="hidden md:flex items-center gap-2">
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm">
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Button>
+                </Link>
+                <Link href="/admin/plans">
+                  <Button variant="ghost" size="sm">
+                    <Users className="h-4 w-4 mr-2" />
+                    Plans
+                  </Button>
+                </Link>
+                <Link href="/admin/setup">
+                  <Button variant="ghost" size="sm">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Setup
+                  </Button>
+                </Link>
+              </nav>
+            )}
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <DemoResetButton />
-            <RoleSwitcher />
+            <ModeToggle />
             <UserProfile />
           </div>
         </div>
