@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { UserProfile } from "@/components/auth/user-profile";
-import { ModeToggle } from "./ui/mode-toggle";
 import { Sparkles, LayoutDashboard, BookOpen, Settings, Users } from "lucide-react";
 import { Button } from "./ui/button";
 import { RoleSwitcher, useUserRole } from "./RoleSwitcher";
@@ -71,7 +70,6 @@ export function SiteHeader() {
             <DemoResetButton />
             <RoleSwitcher />
             <UserProfile />
-            <ModeToggle />
           </div>
         </div>
       </div>
