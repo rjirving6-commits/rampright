@@ -22,7 +22,10 @@
       "Bash(git checkout:*)",
       "Bash(git push:*)",
       "Bash(find:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(pnpm run db:migrate:*)",
+      "Bash(pnpm run typecheck:*)",
+      "Bash(pnpm run lint)"
     ],
     "additionalDirectories": [
       "C:\\c\\Projects\\nextjs-better-auth-postgresql-starter-kit"
