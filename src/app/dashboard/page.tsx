@@ -81,29 +81,29 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <div className="container mx-auto px-4 py-8">
-        <div className="space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Header Section */}
-          <header className="space-y-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+          <header className="space-y-3 sm:space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground break-words">
                   Welcome back, {user.name}! 👋
                 </h1>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
                   You&apos;re crushing week {currentWeek}!
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Badge variant="outline">New Hire View</Badge>
+              <div className="flex gap-2 flex-shrink-0">
+                <Badge variant="outline" className="text-xs sm:text-sm">New Hire View</Badge>
               </div>
             </div>
           </header>
 
           {/* Metrics Section */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-foreground">Your Progress</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <section className="space-y-3 sm:space-y-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-foreground">Your Progress</h2>
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               <MetricsCard
                 title="Days Active"
                 value="9"
@@ -136,14 +136,14 @@ export default async function DashboardPage() {
           </section>
 
           {/* Learning Modules Section */}
-          <section className="space-y-4">
+          <section className="space-y-3 sm:space-y-4">
             <div>
-              <h2 className="text-xl font-semibold text-foreground">Learning Modules</h2>
-              <p className="text-muted-foreground text-sm">
+              <h2 className="text-lg sm:text-xl font-semibold text-foreground">Learning Modules</h2>
+              <p className="text-muted-foreground text-xs sm:text-sm">
                 Essential knowledge to help you succeed in your role
               </p>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {modules.map((module) => {
                 const metadata = moduleMetadata[module.type as keyof typeof moduleMetadata];
                 const Icon = metadata.icon;
@@ -176,19 +176,19 @@ export default async function DashboardPage() {
           </section>
 
           {/* Main Content Grid */}
-          <div className="grid gap-8 lg:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 grid-cols-1 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <OnboardingChecklist tasks={tasks} tasksByWeek={tasksByWeek} />
             </div>
-            <div>
+            <div className="lg:col-span-1">
               <TeamDirectory people={importantPeople} />
             </div>
           </div>
 
           {/* 60-Day Timeline Section */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-foreground">Your 4-Week Roadmap</h2>
-            <div className="grid gap-4 md:grid-cols-4">
+          <section className="space-y-3 sm:space-y-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-foreground">Your 4-Week Roadmap</h2>
+            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {[1, 2, 3, 4].map((week) => {
                 const weekProgress = progress.byWeek[week] || { total: 0, completed: 0, percentage: 0 };
                 const isCurrentWeek = week === currentWeek;
@@ -248,18 +248,18 @@ export default async function DashboardPage() {
           </section>
 
           {/* Weekly Reflection Section */}
-          <section className="space-y-4">
+          <section className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg sm:text-xl font-semibold text-foreground">
                   Weekly Reflection
                 </h2>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-xs sm:text-sm">
                   Share your experience and get personalized support
                 </p>
               </div>
             </div>
-            <div className="max-w-md p-6 bg-card rounded-lg border border-border shadow-soft">
+            <div className="w-full max-w-md p-4 sm:p-6 bg-card rounded-lg border border-border shadow-soft">
               <WeeklyReflectionForm planId="plan-1" week={currentWeek} />
             </div>
           </section>

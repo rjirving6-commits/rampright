@@ -12,21 +12,21 @@ export default function AdminPlansPage() {
   const plans = getAllOnboardingPlans();
 
   return (
-    <div className="container mx-auto max-w-6xl space-y-8 py-8">
+    <div className="container mx-auto max-w-6xl space-y-6 sm:space-y-8 py-6 sm:py-8 px-4 sm:px-6">
       {/* Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-muted-foreground">
-          <Users className="h-5 w-5" />
-          <span className="text-sm font-medium">Manager View</span>
+          <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="text-xs sm:text-sm font-medium">Manager View</span>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight">Onboarding Plans</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Onboarding Plans</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Monitor progress and provide support for your new hires
         </p>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -91,11 +91,11 @@ export default function AdminPlansPage() {
 
             return (
               <Card key={plan.id} className="transition-shadow hover:shadow-md">
-                <CardContent className="p-6">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     {/* User Info */}
-                    <div className="flex items-center gap-4">
-                      <Avatar className="h-12 w-12">
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
                         <AvatarImage src={user.avatarUrl} alt={user.name} />
                         <AvatarFallback>
                           {user.name
@@ -104,9 +104,9 @@ export default function AdminPlansPage() {
                             .join("")}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{user.name}</h3>
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                          <h3 className="text-sm sm:text-base font-semibold truncate">{user.name}</h3>
                           <Badge
                             variant={
                               plan.status === "completed"
@@ -116,6 +116,7 @@ export default function AdminPlansPage() {
                                 : "outline"
                             }
                             className={cn(
+                              "text-xs flex-shrink-0",
                               plan.status === "completed" &&
                                 "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200"
                             )}
@@ -127,12 +128,12 @@ export default function AdminPlansPage() {
                               : "Paused"}
                           </Badge>
                         </div>
-                        <p className="text-sm text-muted-foreground">{user.email}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{user.email}</p>
                       </div>
                     </div>
 
                     {/* Progress Info */}
-                    <div className="flex flex-col gap-3 md:min-w-[300px]">
+                    <div className="flex flex-col gap-3 sm:min-w-[200px] lg:min-w-[300px]">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">Overall Progress</span>
                         <span className="font-medium">
@@ -161,8 +162,8 @@ export default function AdminPlansPage() {
                     </div>
 
                     {/* Action Button */}
-                    <Link href={`/admin/plans/${plan.id}`}>
-                      <Button variant="outline" className="gap-2">
+                    <Link href={`/admin/plans/${plan.id}`} className="w-full sm:w-auto">
+                      <Button variant="outline" className="gap-2 w-full sm:w-auto">
                         View Details
                         <ArrowRight className="h-4 w-4" />
                       </Button>

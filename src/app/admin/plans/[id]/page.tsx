@@ -55,7 +55,7 @@ export default async function PlanDetailPage({ params }: PageProps) {
   );
 
   return (
-    <div className="container mx-auto max-w-7xl space-y-8 py-8">
+    <div className="container mx-auto max-w-7xl space-y-6 sm:space-y-8 py-6 sm:py-8 px-4 sm:px-6">
       {/* Breadcrumbs */}
       <Breadcrumb>
         <BreadcrumbList>
@@ -70,34 +70,34 @@ export default async function PlanDetailPage({ params }: PageProps) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{user.name}</BreadcrumbPage>
+            <BreadcrumbPage className="truncate max-w-[150px] sm:max-w-none">{user.name}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       {/* Back Button */}
       <Link href="/admin/plans">
-        <Button variant="ghost" className="gap-2">
+        <Button variant="ghost" className="gap-2 text-sm sm:text-base">
           <ArrowLeft className="h-4 w-4" />
           Back to Plans
         </Button>
       </Link>
 
       {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Avatar className="h-12 w-12 sm:h-16 sm:w-16 flex-shrink-0">
             <AvatarImage src={user.avatarUrl} alt={user.name} />
-            <AvatarFallback className="text-lg">
+            <AvatarFallback className="text-sm sm:text-lg">
               {user.name
                 .split(" ")
                 .map((n) => n[0])
                 .join("")}
             </AvatarFallback>
           </Avatar>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold tracking-tight">{user.name}</h1>
+          <div className="space-y-2 min-w-0 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight truncate">{user.name}</h1>
               <Badge
                 variant={
                   plan.status === "completed"
@@ -107,6 +107,7 @@ export default async function PlanDetailPage({ params }: PageProps) {
                     : "outline"
                 }
                 className={cn(
+                  "text-xs sm:text-sm flex-shrink-0",
                   plan.status === "completed" &&
                     "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200"
                 )}
@@ -118,13 +119,13 @@ export default async function PlanDetailPage({ params }: PageProps) {
                   : "Paused"}
               </Badge>
             </div>
-            <p className="text-muted-foreground">{user.email}</p>
+            <p className="text-sm sm:text-base text-muted-foreground truncate">{user.email}</p>
           </div>
         </div>
       </div>
 
       {/* Overview Stats */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Overall Progress</CardTitle>
@@ -177,12 +178,12 @@ export default async function PlanDetailPage({ params }: PageProps) {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-6 sm:gap-8 grid-cols-1 lg:grid-cols-2">
         {/* Progress Timeline */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
-            <h2 className="text-2xl font-semibold">Progress Timeline</h2>
-            <p className="text-sm text-muted-foreground">
+            <h2 className="text-xl sm:text-2xl font-semibold">Progress Timeline</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Week-by-week task completion and status
             </p>
           </div>
@@ -195,10 +196,10 @@ export default async function PlanDetailPage({ params }: PageProps) {
         </div>
 
         {/* Reflections */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
-            <h2 className="text-2xl font-semibold">Weekly Reflections</h2>
-            <p className="text-sm text-muted-foreground">
+            <h2 className="text-xl sm:text-2xl font-semibold">Weekly Reflections</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Feedback and insights from the new hire
             </p>
           </div>

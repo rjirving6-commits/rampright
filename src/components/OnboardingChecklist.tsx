@@ -40,13 +40,13 @@ export default function OnboardingChecklist({ tasks: initialTasks }: OnboardingC
   });
 
   return (
-    <Card className="p-6 space-y-6">
+    <Card className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-foreground">Your Onboarding Journey</h3>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+          <h3 className="text-xl sm:text-2xl font-bold text-foreground">Your Onboarding Journey</h3>
           <div className="flex items-center gap-2">
             <CheckCircle2 className="text-success" size={20} />
-            <span className="text-sm font-medium text-muted-foreground">
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground">
               {completedCount} of {tasks.length} completed
             </span>
           </div>
@@ -75,46 +75,46 @@ export default function OnboardingChecklist({ tasks: initialTasks }: OnboardingC
 
           return (
             <AccordionItem key={week} value={`week-${week}`} className="border rounded-lg">
-              <AccordionTrigger className="px-4 py-3 hover:no-underline">
-                <div className="flex items-center justify-between w-full pr-4">
-                  <div className="flex items-center gap-3">
-                    <Badge variant="outline">Week {week}</Badge>
-                    <span className="font-semibold text-foreground">
+              <AccordionTrigger className="px-3 sm:px-4 py-3 hover:no-underline">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full pr-4 gap-2 sm:gap-0">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                    <Badge variant="outline" className="text-xs">Week {week}</Badge>
+                    <span className="text-sm sm:text-base font-semibold text-foreground">
                       {week === 1 && "Foundation & Culture"}
                       {week === 2 && "Product Deep Dive"}
                       {week === 3 && "Customer & Market Knowledge"}
                       {week === 4 && "Independence & First Wins"}
                     </span>
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-xs sm:text-sm text-muted-foreground">
                     {completedInWeek}/{totalInWeek} tasks
                   </span>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="px-4 pb-4">
+              <AccordionContent className="px-3 sm:px-4 pb-4">
                 <div className="space-y-3 pt-2">
                   {weekTasks.map((task) => (
                     <div
                       key={task.id}
-                      className={`p-4 border rounded-lg transition-all hover:shadow-soft ${
+                      className={`p-3 sm:p-4 border rounded-lg transition-all hover:shadow-soft ${
                         task.completed ? 'bg-accent/30 border-success/20' : 'bg-card border-border'
                       }`}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-2 sm:gap-3">
                         <Checkbox
                           checked={task.completed}
                           onCheckedChange={() => toggleTask(task.id)}
-                          className="mt-1"
+                          className="mt-1 flex-shrink-0"
                         />
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <h4 className={`font-semibold ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                        <div className="flex-1 space-y-2 min-w-0">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-2 sm:gap-4">
+                            <div className="flex-1 min-w-0">
+                              <h4 className={`text-sm sm:text-base font-semibold break-words ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
                                 {task.title}
                               </h4>
-                              <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+                              <p className="text-xs sm:text-sm text-muted-foreground mt-1 break-words">{task.description}</p>
                             </div>
-                            <Badge variant="outline" className="whitespace-nowrap">
+                            <Badge variant="outline" className="text-xs whitespace-nowrap flex-shrink-0">
                               {task.category}
                             </Badge>
                           </div>

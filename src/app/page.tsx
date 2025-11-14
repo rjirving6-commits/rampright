@@ -79,15 +79,15 @@ export default function Home() {
       <Hero />
 
       {/* Metrics Banner */}
-      <section className="py-16 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-        <div className="container mx-auto px-4">
-          <div className="grid gap-8 md:grid-cols-3">
+      <section className="py-12 sm:py-16 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-3">
             {metrics.map((metric, index) => (
               <div key={index} className="text-center space-y-2">
-                <div className="text-5xl font-bold bg-gradient-warm bg-clip-text text-transparent">
+                <div className="text-4xl sm:text-5xl font-bold bg-gradient-warm bg-clip-text text-transparent">
                   {metric.value}
                 </div>
-                <div className="text-white">{metric.label}</div>
+                <div className="text-sm sm:text-base text-white">{metric.label}</div>
               </div>
             ))}
           </div>
@@ -95,21 +95,21 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+      <section className="py-16 sm:py-24 bg-background">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3 sm:space-y-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
               Everything you need to{" "}
               <span className="bg-gradient-warm bg-clip-text text-transparent">
                 onboard right
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-base sm:text-xl text-muted-foreground">
               From day one to full productivity, guide every new hire with personalized experiences and data-driven insights.
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
               <Card key={index} className="p-6 space-y-4 hover:shadow-medium transition-all">
                 <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center">
@@ -124,17 +124,17 @@ export default function Home() {
       </section>
 
       {/* Dashboard Preview */}
-      <section className="py-24 bg-gradient-subtle">
-        <div className="container mx-auto px-4">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
-            <div className="space-y-6">
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+      <section className="py-16 sm:py-24 bg-gradient-subtle">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid gap-8 sm:gap-12 grid-cols-1 lg:grid-cols-2 items-center">
+            <div className="space-y-4 sm:space-y-6 order-2 lg:order-1">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
                 Analytics that make HR a{" "}
                 <span className="bg-gradient-warm bg-clip-text text-transparent">
                   strategic hero
                 </span>
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-base sm:text-xl text-muted-foreground">
                 Real-time dashboards track ramp time, completion rates, retention impact, and manager effectiveness. Finally, metrics that prove HR&apos;s value to leadership.
               </p>
               <div className="space-y-3">
@@ -151,20 +151,20 @@ export default function Home() {
                 ))}
               </div>
               <Link href="/dashboard">
-                <Button variant="hero" size="lg" className="group">
+                <Button variant="hero" size="lg" className="group w-full sm:w-auto">
                   Explore Dashboard
                   <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
-            <div className="relative">
+            <div className="relative order-1 lg:order-2">
               <div className="absolute inset-0 bg-primary/20 blur-3xl"></div>
               <Image
                 src="/dashboard-preview.jpg"
                 alt="Analytics dashboard preview"
                 width={1200}
                 height={800}
-                className="relative rounded-2xl shadow-medium w-full"
+                className="relative rounded-2xl shadow-medium w-full h-auto"
               />
             </div>
           </div>
@@ -172,26 +172,26 @@ export default function Home() {
       </section>
 
       {/* Demo Access Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <div className="space-y-4">
+      <section className="py-16 sm:py-24 bg-background">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
+            <div className="space-y-3 sm:space-y-4">
               <Badge variant="secondary" className="mb-2">
                 <Play className="h-3 w-3 mr-1" />
                 Interactive Demo
               </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
                 Try the{" "}
                 <span className="bg-gradient-warm bg-clip-text text-transparent">
                   live demo
                 </span>
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-base sm:text-xl text-muted-foreground">
                 Experience RampRight from two perspectives: as a manager setting up onboarding plans, or as a new hire going through the journey.
               </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto">
               {/* Manager Demo Card */}
               <Card className="p-8 space-y-6 hover:shadow-lg transition-all border-2 hover:border-primary">
                 <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
@@ -267,12 +267,12 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-        <div className="container mx-auto px-4 text-center space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+      <section className="py-16 sm:py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <div className="container mx-auto px-4 sm:px-6 text-center space-y-6 sm:space-y-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
             Ready to transform your onboarding?
           </h2>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl text-white/80 max-w-2xl mx-auto">
             Join forward-thinking HR teams who are proving their strategic impact while helping new hires succeed from day one.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
