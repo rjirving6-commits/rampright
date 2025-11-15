@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
@@ -15,7 +15,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { ImportantPerson } from "@/lib/mock-data"
+
+interface ImportantPerson {
+  name: string
+  title: string
+  email: string
+  role: string
+  photoUrl?: string
+  bio?: string
+  order: number
+}
 
 interface PeopleEditorProps {
   people: ImportantPerson[]
@@ -23,118 +32,80 @@ interface PeopleEditorProps {
 }
 
 export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
-  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [isAdding, setIsAdding] = useState(false)
   const [formData, setFormData] = useState<Partial<ImportantPerson>>({
     name: "",
-    role: "",
+    title: "",
     email: "",
-    type: "team_member",
+    role: "team_member",
     bio: "",
+    order: people.length,
   })
-  const [originalData, setOriginalData] = useState<Partial<ImportantPerson> | null>(null)
-  const editFormRef = useRef<HTMLDivElement>(null)
 
-  const handleEdit = (person: ImportantPerson) => {
-    setEditingId(person.id)
-    setFormData(person)
-    setOriginalData({ ...person })
+  const handleEdit = (index: number) => {
+    setEditingIndex(index)
+    setFormData(people[index])
     setIsAdding(false)
   }
 
-  // Scroll to edit form when editing starts
-  useEffect(() => {
-    if ((editingId || isAdding) && editFormRef.current) {
-      // Small delay to ensure the form is rendered
-      setTimeout(() => {
-        editFormRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
-      }, 100)
-    }
-  }, [editingId, isAdding])
-
-  const handleDelete = (id: string) => {
+  const handleDelete = (index: number) => {
     if (confirm("Are you sure you want to remove this person?")) {
-      onChange(people.filter(p => p.id !== id))
+      onChange(people.filter((_, i) => i !== index))
     }
-  }
-
-  // Check if form has changes
-  const hasChanges = () => {
-    if (isAdding) {
-      // For adding, check if required fields are filled
-      return !!(formData.name && formData.role && formData.email)
-    }
-    if (editingId && originalData) {
-      // For editing, compare with original data
-      return (
-        formData.name !== originalData.name ||
-        formData.role !== originalData.role ||
-        formData.email !== originalData.email ||
-        formData.type !== originalData.type ||
-        (formData.bio || "") !== (originalData.bio || "")
-      )
-    }
-    return false
   }
 
   const handleSave = () => {
-    if (!formData.name || !formData.role || !formData.email) {
+    if (!formData.name || !formData.title || !formData.email) {
       alert("Please fill in all required fields")
       return
     }
 
-    if (editingId) {
-      // Update existing person
-      onChange(
-        people.map(p =>
-          p.id === editingId ? { ...p, ...formData } as ImportantPerson : p
-        )
-      )
-      setEditingId(null)
+    const personData = {
+      name: formData.name,
+      title: formData.title,
+      email: formData.email,
+      role: formData.role || "team_member",
+      bio: formData.bio,
+      photoUrl: formData.photoUrl,
+      order: formData.order || people.length,
+    }
+
+    if (editingIndex !== null) {
+      const updated = [...people]
+      updated[editingIndex] = personData as ImportantPerson
+      onChange(updated)
+      setEditingIndex(null)
     } else {
-      // Add new person
-      const newPerson: ImportantPerson = {
-        id: `person-${Date.now()}`,
-        name: formData.name!,
-        role: formData.role!,
-        email: formData.email!,
-        type: formData.type || "team_member",
-        bio: formData.bio,
-        avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.name}`,
-      }
-      onChange([...people, newPerson])
+      onChange([...people, personData as ImportantPerson])
       setIsAdding(false)
     }
 
-    // Reset form
     setFormData({
       name: "",
-      role: "",
+      title: "",
       email: "",
-      type: "team_member",
+      role: "team_member",
       bio: "",
+      order: people.length + 1,
     })
-    setOriginalData(null)
   }
 
   const handleCancel = () => {
-    setEditingId(null)
+    setEditingIndex(null)
     setIsAdding(false)
     setFormData({
       name: "",
-      role: "",
+      title: "",
       email: "",
-      type: "team_member",
+      role: "team_member",
       bio: "",
+      order: people.length,
     })
-    setOriginalData(null)
   }
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
+  const getTypeColor = (role: string) => {
+    switch (role) {
       case "manager":
         return "bg-blue-500/10 text-blue-500 border-blue-500/20"
       case "buddy":
@@ -146,8 +117,8 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
     }
   }
 
-  const getTypeLabel = (type: string) => {
-    return type
+  const getTypeLabel = (role: string) => {
+    return role
       .split("_")
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ")
@@ -162,9 +133,16 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
         <Button
           onClick={() => {
             setIsAdding(true)
-            setOriginalData(null)
+            setFormData({
+              name: "",
+              title: "",
+              email: "",
+              role: "team_member",
+              bio: "",
+              order: people.length,
+            })
           }}
-          disabled={isAdding || editingId !== null}
+          disabled={isAdding || editingIndex !== null}
           size="sm"
         >
           Add Person
@@ -172,8 +150,8 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
       </div>
 
       {/* Add/Edit Form */}
-      {(isAdding || editingId) && (
-        <Card ref={editFormRef}>
+      {(isAdding || editingIndex !== null) && (
+        <Card>
           <CardContent className="pt-6 space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -191,14 +169,14 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="person-role">
-                  Role <span className="text-destructive">*</span>
+                <Label htmlFor="person-title">
+                  Title <span className="text-destructive">*</span>
                 </Label>
                 <Input
-                  id="person-role"
-                  value={formData.role || ""}
+                  id="person-title"
+                  value={formData.title || ""}
                   onChange={(e) =>
-                    setFormData(prev => ({ ...prev, role: e.target.value }))
+                    setFormData(prev => ({ ...prev, title: e.target.value }))
                   }
                   placeholder="Job title"
                 />
@@ -222,17 +200,14 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="person-type">Type</Label>
+                <Label htmlFor="person-role">Role</Label>
                 <Select
-                  value={formData.type || "team_member"}
+                  value={formData.role || "team_member"}
                   onValueChange={(value) =>
-                    setFormData(prev => ({
-                      ...prev,
-                      type: value as ImportantPerson["type"],
-                    }))
+                    setFormData(prev => ({ ...prev, role: value }))
                   }
                 >
-                  <SelectTrigger id="person-type">
+                  <SelectTrigger id="person-role">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -262,12 +237,7 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
               <Button variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button 
-                variant={hasChanges() ? "default" : "outline"}
-                onClick={handleSave}
-                disabled={!hasChanges()}
-                className={hasChanges() ? "font-semibold shadow-lg hover:shadow-xl transition-all scale-105" : ""}
-              >
+              <Button onClick={handleSave}>
                 Save
               </Button>
             </div>
@@ -277,12 +247,11 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
 
       {/* People List */}
       <div className="space-y-3">
-        {people.map((person) => (
-          <Card key={person.id}>
+        {people.map((person, index) => (
+          <Card key={index}>
             <CardContent className="p-4">
               <div className="flex items-start gap-4">
                 <Avatar>
-                  <AvatarImage src={person.avatarUrl} alt={person.name} />
                   <AvatarFallback>
                     {person.name
                       .split(" ")
@@ -297,11 +266,11 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
                     <div>
                       <h4 className="font-semibold">{person.name}</h4>
                       <p className="text-sm text-muted-foreground">
-                        {person.role}
+                        {person.title}
                       </p>
                     </div>
-                    <Badge variant="outline" className={getTypeColor(person.type)}>
-                      {getTypeLabel(person.type)}
+                    <Badge variant="outline" className={getTypeColor(person.role)}>
+                      {getTypeLabel(person.role)}
                     </Badge>
                   </div>
 
@@ -319,16 +288,16 @@ export function PeopleEditor({ people, onChange }: PeopleEditorProps) {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleEdit(person)}
-                      disabled={isAdding || editingId !== null}
+                      onClick={() => handleEdit(index)}
+                      disabled={isAdding || editingIndex !== null}
                     >
                       Edit
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleDelete(person.id)}
-                      disabled={isAdding || editingId !== null}
+                      onClick={() => handleDelete(index)}
+                      disabled={isAdding || editingIndex !== null}
                     >
                       Remove
                     </Button>

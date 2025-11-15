@@ -1,4 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { moduleContent } from "@/lib/schema";
+import { eq, asc, and } from "drizzle-orm";
+import {
+  requireAuth,
+  requireCompanyAccess,
+  successResponse,
+  createdResponse,
+  validationError,
+  unauthorizedError,
+  forbiddenError,
+  errorResponse,
+} from "@/lib/api-utils";
+import { createModuleContentSchema, validateData } from "@/lib/validators";
 
 /**
  * GET /api/modules/:companyId
@@ -12,21 +26,31 @@ export async function GET(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { companyId } = await params;
 
-    // TODO: Check authentication and company access
-    // TODO: Fetch all modules for company (ordered)
-    // TODO: Return modules array
+    const hasAccess = await requireCompanyAccess(session.user.id, companyId);
+    if (!hasAccess) {
+      return forbiddenError("You do not have access to this company");
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const modules = await db
+      .select()
+      .from(moduleContent)
+      .where(eq(moduleContent.companyId, companyId))
+      .orderBy(asc(moduleContent.order));
+
+    return successResponse(modules);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }
 
@@ -43,21 +67,60 @@ export async function POST(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { companyId } = await params;
 
-    // TODO: Validate request body
-    // TODO: Check authentication and authorization
-    // TODO: Upsert module content
-    // TODO: Return module
+    const hasAccess = await requireCompanyAccess(session.user.id, companyId);
+    if (!hasAccess) {
+      return forbiddenError("You do not have access to this company");
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const body = await request.json();
+    const validation = validateData(createModuleContentSchema, body);
+
+    if (!validation.success) {
+      return validationError(validation.errors);
+    }
+
+    const existingModule = await db
+      .select()
+      .from(moduleContent)
+      .where(
+        and(
+          eq(moduleContent.companyId, companyId),
+          eq(moduleContent.type, validation.data.type)
+        )
+      )
+      .limit(1);
+
+    if (existingModule.length > 0) {
+      const [updated] = await db
+        .update(moduleContent)
+        .set(validation.data)
+        .where(eq(moduleContent.id, existingModule[0].id))
+        .returning();
+
+      return successResponse(updated);
+    }
+
+    const [created] = await db
+      .insert(moduleContent)
+      .values({
+        ...validation.data,
+        companyId,
+      })
+      .returning();
+
+    return createdResponse(created);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

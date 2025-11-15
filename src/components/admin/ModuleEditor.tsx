@@ -9,17 +9,23 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ReactMarkdown from "react-markdown"
-import type { ModuleContent } from "@/lib/mock-data"
+
+interface ModuleContent {
+  type: string
+  title: string
+  content: string
+  order: number
+}
 
 interface ModuleEditorProps {
   modules: ModuleContent[]
-  onUpdate: (moduleId: string, updates: Partial<ModuleContent>) => void
+  onUpdate: (moduleType: string, updates: Partial<ModuleContent>) => void
 }
 
 export function ModuleEditor({ modules, onUpdate }: ModuleEditorProps) {
-  const [selectedModuleId, setSelectedModuleId] = useState<string>(modules[0]?.id || "")
+  const [selectedModuleType, setSelectedModuleType] = useState<string>(modules[0]?.type || "")
 
-  const selectedModule = modules.find(m => m.id === selectedModuleId)
+  const selectedModule = modules.find(m => m.type === selectedModuleType)
 
   if (!selectedModule) {
     return <div>No modules available</div>
@@ -59,10 +65,10 @@ export function ModuleEditor({ modules, onUpdate }: ModuleEditorProps) {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {modules.map((module) => (
           <Button
-            key={module.id}
-            variant={selectedModuleId === module.id ? "default" : "outline"}
+            key={module.type}
+            variant={selectedModuleType === module.type ? "default" : "outline"}
             className="h-auto py-3 px-4 justify-start"
-            onClick={() => setSelectedModuleId(module.id)}
+            onClick={() => setSelectedModuleType(module.type)}
           >
             <span className="mr-2 text-lg">{getModuleIcon(module.type)}</span>
             <span className="text-xs">{getModuleLabel(module.type)}</span>
@@ -92,7 +98,7 @@ export function ModuleEditor({ modules, onUpdate }: ModuleEditorProps) {
               id="module-title"
               value={selectedModule.title}
               onChange={(e) =>
-                onUpdate(selectedModule.id, { title: e.target.value })
+                onUpdate(selectedModule.type, { title: e.target.value })
               }
               placeholder="Enter module title"
             />
@@ -133,7 +139,7 @@ export function ModuleEditor({ modules, onUpdate }: ModuleEditorProps) {
                   id="module-content"
                   value={selectedModule.content}
                   onChange={(e) =>
-                    onUpdate(selectedModule.id, { content: e.target.value })
+                    onUpdate(selectedModule.type, { content: e.target.value })
                   }
                   placeholder="Enter module content..."
                   className="min-h-[400px] font-mono text-sm"

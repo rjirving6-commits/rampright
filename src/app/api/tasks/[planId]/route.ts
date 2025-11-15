@@ -1,4 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { tasks, onboardingPlans } from "@/lib/schema";
+import { eq, asc } from "drizzle-orm";
+import {
+  requireAuth,
+  successResponse,
+  createdResponse,
+  validationError,
+  unauthorizedError,
+  forbiddenError,
+  errorResponse,
+} from "@/lib/api-utils";
+import { createTaskSchema, validateData } from "@/lib/validators";
 
 /**
  * GET /api/tasks/:planId
@@ -12,21 +25,40 @@ export async function GET(
   { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { planId } = await params;
 
-    // TODO: Check authentication and plan access
-    // TODO: Fetch all tasks for plan (ordered by weekNumber, order)
-    // TODO: Return tasks array
+    const [plan] = await db
+      .select()
+      .from(onboardingPlans)
+      .where(eq(onboardingPlans.id, planId))
+      .limit(1);
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    if (!plan) {
+      return errorResponse("Plan not found", 404);
+    }
+
+    if (plan.userId !== session.user.id) {
+      return forbiddenError("You do not have access to this plan");
+    }
+
+    const tasksList = await db
+      .select()
+      .from(tasks)
+      .where(eq(tasks.planId, planId))
+      .orderBy(asc(tasks.weekNumber), asc(tasks.order));
+
+    return successResponse(tasksList);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }
 
@@ -43,21 +75,48 @@ export async function POST(
   { params }: { params: Promise<{ planId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { planId } = await params;
 
-    // TODO: Validate request body
-    // TODO: Check authentication and authorization
-    // TODO: Create task
-    // TODO: Return created task with 201
+    const [plan] = await db
+      .select()
+      .from(onboardingPlans)
+      .where(eq(onboardingPlans.id, planId))
+      .limit(1);
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    if (!plan) {
+      return errorResponse("Plan not found", 404);
+    }
+
+    if (plan.userId !== session.user.id) {
+      return forbiddenError("You do not have access to this plan");
+    }
+
+    const body = await request.json();
+    const validation = validateData(createTaskSchema, body);
+
+    if (!validation.success) {
+      return validationError(validation.errors);
+    }
+
+    const [task] = await db
+      .insert(tasks)
+      .values({
+        ...validation.data,
+        planId,
+      })
+      .returning();
+
+    return createdResponse(task);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

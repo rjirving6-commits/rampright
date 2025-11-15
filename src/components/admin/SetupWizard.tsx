@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,8 +11,32 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ModuleEditor } from "./ModuleEditor"
 import { PeopleEditor } from "./PeopleEditor"
-import { mockCompany, mockTemplate, mockModuleContent, mockImportantPeople } from "@/lib/mock-data"
-import type { Company, ModuleContent, ImportantPerson } from "@/lib/mock-data"
+import { Loader2, CheckCircle2 } from "lucide-react"
+
+interface Company {
+  name: string
+  industry: string
+  size: string
+  website: string
+  description: string
+}
+
+interface ModuleContent {
+  type: string
+  title: string
+  content: string
+  order: number
+}
+
+interface ImportantPerson {
+  name: string
+  title: string
+  email: string
+  role: string
+  photoUrl?: string
+  bio?: string
+  order: number
+}
 
 interface WizardData {
   company: Company
@@ -23,30 +48,82 @@ interface WizardData {
 }
 
 export function SetupWizard() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isComplete, setIsComplete] = useState(false)
   const [data, setData] = useState<WizardData>({
-    company: { ...mockCompany },
-    templateId: mockTemplate.id,
-    modules: mockModuleContent.map(m => ({ ...m })),
-    people: mockImportantPeople.map(p => ({ ...p })),
+    company: {
+      name: "",
+      industry: "",
+      size: "",
+      website: "",
+      description: "",
+    },
+    templateId: "default-4-week",
+    modules: [
+      { type: "company_overview", title: "Company Overview", content: "", order: 0 },
+      { type: "product", title: "Product Overview", content: "", order: 1 },
+      { type: "competitive", title: "Competitive Landscape", content: "", order: 2 },
+      { type: "tools", title: "Tools & Systems", content: "", order: 3 },
+      { type: "culture", title: "Team Culture", content: "", order: 4 },
+    ],
+    people: [],
     newHireEmail: "",
     newHireName: "",
   })
 
   const totalSteps = 4
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
     } else {
-      // Final step - log the collected data
-      console.log("=== ONBOARDING SETUP COMPLETE ===")
-      console.log("Company Info:", data.company)
-      console.log("Template ID:", data.templateId)
-      console.log("Modules:", data.modules)
-      console.log("Important People:", data.people)
-      console.log("New Hire:", { name: data.newHireName, email: data.newHireEmail })
-      alert("Setup complete! Check console for collected data.")
+      await handleSubmit()
+    }
+  }
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+
+    try {
+      const companyResponse = await fetch("/api/companies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data.company),
+      })
+
+      if (!companyResponse.ok) throw new Error("Failed to create company")
+
+      const company = await companyResponse.json()
+
+      for (const moduleItem of data.modules) {
+        if (moduleItem.content) {
+          await fetch(`/api/modules/${company.id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(moduleItem),
+          })
+        }
+      }
+
+      for (const person of data.people) {
+        await fetch(`/api/people/${company.id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(person),
+        })
+      }
+
+      setIsComplete(true)
+
+      setTimeout(() => {
+        router.push("/admin/plans")
+        router.refresh()
+      }, 2000)
+    } catch {
+      alert("Failed to complete setup. Please try again.")
+      setIsSubmitting(false)
     }
   }
 
@@ -63,11 +140,11 @@ export function SetupWizard() {
     }))
   }
 
-  const updateModule = (moduleId: string, updates: Partial<ModuleContent>) => {
+  const updateModule = (moduleType: string, updates: Partial<ModuleContent>) => {
     setData(prev => ({
       ...prev,
       modules: prev.modules.map(m =>
-        m.id === moduleId ? { ...m, ...updates } : m
+        m.type === moduleType ? { ...m, ...updates } : m
       )
     }))
   }
@@ -193,53 +270,44 @@ export function SetupWizard() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div
-                className={`p-6 rounded-lg border-2 cursor-pointer transition-colors ${
-                  data.templateId === mockTemplate.id
-                    ? "border-primary bg-primary/5"
-                    : "border-muted hover:border-primary/50"
-                }`}
-                onClick={() =>
-                  setData(prev => ({ ...prev, templateId: mockTemplate.id }))
-                }
+                className="p-6 rounded-lg border-2 border-primary bg-primary/5"
               >
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-semibold">{mockTemplate.name}</h3>
+                      <h3 className="text-lg font-semibold">4-Week GTM Onboarding</h3>
                       <Badge>Default</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {mockTemplate.description}
+                      Comprehensive 4-week program for go-to-market roles
                     </p>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mt-4">
-                      <span>{mockTemplate.duration} weeks</span>
+                      <span>4 weeks</span>
                       <span>•</span>
-                      <span>28 tasks</span>
+                      <span>Customizable tasks</span>
                       <span>•</span>
                       <span>5 learning modules</span>
                     </div>
                   </div>
-                  {data.templateId === mockTemplate.id && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <svg
-                        className="w-4 h-4 text-primary-foreground"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path d="M5 13l4 4L19 7"></path>
-                      </svg>
-                    </div>
-                  )}
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 text-primary-foreground"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </div>
                 </div>
               </div>
 
               <div className="p-4 bg-muted rounded-lg">
                 <p className="text-sm text-muted-foreground">
-                  More templates coming soon! For now, you can customize the GTM template
+                  More templates coming soon! For now, you can customize the template
                   in the next step to fit any role.
                 </p>
               </div>
@@ -324,9 +392,9 @@ export function SetupWizard() {
                 </p>
                 <ul className="text-sm text-muted-foreground space-y-1 ml-4 mt-2">
                   <li>• Access to their personalized onboarding plan</li>
-                  <li>• {mockTemplate.duration} weeks of guided tasks and learning</li>
+                  <li>• 4 weeks of guided tasks and learning</li>
                   <li>• Introduction to {data.people.length} important team members</li>
-                  <li>• {data.modules.length} learning modules to review</li>
+                  <li>• {data.modules.filter(m => m.content).length} learning modules to review</li>
                 </ul>
               </div>
             </CardContent>
@@ -334,21 +402,49 @@ export function SetupWizard() {
         )}
       </div>
 
+      {/* Completion Screen */}
+      {isComplete && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <Card className="w-full max-w-md">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <CheckCircle2 className="h-16 w-16 text-success" />
+                <h3 className="text-2xl font-bold">Setup Complete!</h3>
+                <p className="text-muted-foreground">
+                  Your company profile and onboarding content have been created successfully.
+                  Redirecting to plans...
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Navigation Buttons */}
       <div className="flex justify-between items-center pt-6 border-t">
         <Button
           variant="outline"
           onClick={handleBack}
-          disabled={currentStep === 1}
+          disabled={currentStep === 1 || isSubmitting}
         >
           Back
         </Button>
-        <Button 
+        <Button
           onClick={handleNext}
           variant="hero"
+          disabled={isSubmitting}
           className="font-semibold shadow-lg hover:shadow-xl transition-shadow"
         >
-          {currentStep === totalSteps ? "Complete Setup" : "Next →"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creating...
+            </>
+          ) : currentStep === totalSteps ? (
+            "Complete Setup"
+          ) : (
+            "Next →"
+          )}
         </Button>
       </div>
     </div>

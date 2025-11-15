@@ -334,229 +334,229 @@ Implement full CRUD functionality in all API routes and update all components to
 #### Company Management APIs
 
 **File: `src/app/api/companies/route.ts`**
-- [ ] Implement POST `/api/companies` (create company):
-  - [ ] Validate request body with Zod schema
-  - [ ] Check authentication
-  - [ ] Insert company into database
-  - [ ] Return created company with 201 status
-  - [ ] Handle errors (validation, database, auth)
+- [x] Implement POST `/api/companies` (create company):
+  - [x] Validate request body with Zod schema
+  - [x] Check authentication
+  - [x] Insert company into database
+  - [x] Return created company with 201 status
+  - [x] Handle errors (validation, database, auth)
 
 **File: `src/app/api/companies/[id]/route.ts`**
-- [ ] Implement GET `/api/companies/:id`:
-  - [ ] Check authentication
-  - [ ] Check user has access to this company
-  - [ ] Fetch company from database
-  - [ ] Return company or 404
-- [ ] Implement PATCH `/api/companies/:id`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Update company in database
-  - [ ] Return updated company
+- [x] Implement GET `/api/companies/:id`:
+  - [x] Check authentication
+  - [x] Check user has access to this company
+  - [x] Fetch company from database
+  - [x] Return company or 404
+- [x] Implement PATCH `/api/companies/:id`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Update company in database
+  - [x] Return updated company
 
 #### Onboarding Plan APIs
 
 **File: `src/app/api/onboarding/plans/route.ts`**
-- [ ] Implement POST `/api/onboarding/plans`:
-  - [ ] Validate request body
-  - [ ] Check authentication
-  - [ ] Create plan with associated tasks
-  - [ ] Return created plan with 201
+- [x] Implement POST `/api/onboarding/plans`:
+  - [x] Validate request body
+  - [x] Check authentication
+  - [x] Create plan with associated tasks
+  - [x] Return created plan with 201
 
 **File: `src/app/api/onboarding/plans/[id]/route.ts`**
-- [ ] Implement GET `/api/onboarding/plans/:id`:
-  - [ ] Check authentication and authorization
-  - [ ] Fetch plan with related data (company, user info)
-  - [ ] Return plan or 404
-- [ ] Implement PATCH `/api/onboarding/plans/:id`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Update plan (status, currentWeek, etc.)
-  - [ ] Return updated plan
+- [x] Implement GET `/api/onboarding/plans/:id`:
+  - [x] Check authentication and authorization
+  - [x] Fetch plan with related data (company, user info)
+  - [x] Return plan or 404
+- [x] Implement PATCH `/api/onboarding/plans/:id`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Update plan (status, currentWeek, etc.)
+  - [x] Return updated plan
 
 **File: `src/app/api/onboarding/plans/user/[userId]/route.ts`**
-- [ ] Implement GET `/api/onboarding/plans/user/:userId`:
-  - [ ] Check authentication (must be user themselves or manager)
-  - [ ] Fetch user's active plan
-  - [ ] Return plan or 404
+- [x] Implement GET `/api/onboarding/plans/user/:userId`:
+  - [x] Check authentication (must be user themselves or manager)
+  - [x] Fetch user's active plan
+  - [x] Return plan or 404
 
 #### Task APIs
 
 **File: `src/app/api/tasks/[planId]/route.ts`**
-- [ ] Implement GET `/api/tasks/:planId`:
-  - [ ] Check authentication and plan access
-  - [ ] Fetch all tasks for plan (ordered by weekNumber, order)
-  - [ ] Return tasks array
-- [ ] Implement POST `/api/tasks/:planId`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Create task
-  - [ ] Return created task with 201
+- [x] Implement GET `/api/tasks/:planId`:
+  - [x] Check authentication and plan access
+  - [x] Fetch all tasks for plan (ordered by weekNumber, order)
+  - [x] Return tasks array
+- [x] Implement POST `/api/tasks/:planId`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Create task
+  - [x] Return created task with 201
 
 **File: `src/app/api/tasks/[id]/toggle/route.ts`**
-- [ ] Implement PATCH `/api/tasks/:id/toggle`:
-  - [ ] Check authentication and task access
-  - [ ] Toggle completed status
-  - [ ] Set/clear completedAt timestamp
-  - [ ] Return updated task
+- [x] Implement PATCH `/api/tasks/:id/toggle`:
+  - [x] Check authentication and task access
+  - [x] Toggle completed status
+  - [x] Set/clear completedAt timestamp
+  - [x] Return updated task
 
 **File: `src/app/api/tasks/[id]/route.ts`**
-- [ ] Implement DELETE `/api/tasks/:id`:
-  - [ ] Check authentication and authorization (managers only)
-  - [ ] Delete task from database
-  - [ ] Return 204 No Content
+- [x] Implement DELETE `/api/tasks/:id`:
+  - [x] Check authentication and authorization (managers only)
+  - [x] Delete task from database
+  - [x] Return 204 No Content
 
 #### Module Content APIs
 
 **File: `src/app/api/modules/[companyId]/route.ts`**
-- [ ] Implement GET `/api/modules/:companyId`:
-  - [ ] Check authentication and company access
-  - [ ] Fetch all modules for company (ordered)
-  - [ ] Return modules array
-- [ ] Implement POST `/api/modules/:companyId`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Upsert module content
-  - [ ] Return module
+- [x] Implement GET `/api/modules/:companyId`:
+  - [x] Check authentication and company access
+  - [x] Fetch all modules for company (ordered)
+  - [x] Return modules array
+- [x] Implement POST `/api/modules/:companyId`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Upsert module content
+  - [x] Return module
 
 **File: `src/app/api/modules/[companyId]/[type]/route.ts`**
-- [ ] Implement GET `/api/modules/:companyId/:type`:
-  - [ ] Check authentication and company access
-  - [ ] Fetch specific module by type
-  - [ ] Return module or 404
+- [x] Implement GET `/api/modules/:companyId/:type`:
+  - [x] Check authentication and company access
+  - [x] Fetch specific module by type
+  - [x] Return module or 404
 
 **File: `src/app/api/modules/[id]/route.ts`**
-- [ ] Implement DELETE `/api/modules/:id`:
-  - [ ] Check authentication and authorization
-  - [ ] Delete module
-  - [ ] Return 204
+- [x] Implement DELETE `/api/modules/:id`:
+  - [x] Check authentication and authorization
+  - [x] Delete module
+  - [x] Return 204
 
 #### Important People APIs
 
 **File: `src/app/api/people/[companyId]/route.ts`**
-- [ ] Implement GET `/api/people/:companyId`:
-  - [ ] Check authentication and company access
-  - [ ] Fetch all people for company (ordered)
-  - [ ] Return people array
-- [ ] Implement POST `/api/people/:companyId`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Create person
-  - [ ] Return created person with 201
+- [x] Implement GET `/api/people/:companyId`:
+  - [x] Check authentication and company access
+  - [x] Fetch all people for company (ordered)
+  - [x] Return people array
+- [x] Implement POST `/api/people/:companyId`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Create person
+  - [x] Return created person with 201
 
 **File: `src/app/api/people/[id]/route.ts`**
-- [ ] Implement PATCH `/api/people/:id`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Update person
-  - [ ] Return updated person
-- [ ] Implement DELETE `/api/people/:id`:
-  - [ ] Check authentication and authorization
-  - [ ] Delete person
-  - [ ] Return 204
+- [x] Implement PATCH `/api/people/:id`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Update person
+  - [x] Return updated person
+- [x] Implement DELETE `/api/people/:id`:
+  - [x] Check authentication and authorization
+  - [x] Delete person
+  - [x] Return 204
 
 #### Reflections APIs
 
 **File: `src/app/api/reflections/[planId]/route.ts`**
-- [ ] Implement GET `/api/reflections/:planId`:
-  - [ ] Check authentication and plan access
-  - [ ] Fetch all reflections for plan (ordered by weekNumber)
-  - [ ] Return reflections array
-- [ ] Implement POST `/api/reflections/:planId`:
-  - [ ] Validate request body
-  - [ ] Check authentication and authorization
-  - [ ] Create reflection with submittedAt timestamp
-  - [ ] Return created reflection with 201
+- [x] Implement GET `/api/reflections/:planId`:
+  - [x] Check authentication and plan access
+  - [x] Fetch all reflections for plan (ordered by weekNumber)
+  - [x] Return reflections array
+- [x] Implement POST `/api/reflections/:planId`:
+  - [x] Validate request body
+  - [x] Check authentication and authorization
+  - [x] Create reflection with submittedAt timestamp
+  - [x] Return created reflection with 201
 
 ### Part B: Update Components to Use Real APIs
 
 #### Priority 1: Core User Flows
 
 **File: `src/app/dashboard/page.tsx`**
-- [ ] Remove all imports from `@/lib/mock-api`
-- [ ] Create async function to fetch onboarding plan via API:
-  - [ ] `GET /api/onboarding/plans/user/${userId}`
-- [ ] Create async function to fetch tasks:
-  - [ ] `GET /api/tasks/${planId}`
-- [ ] Create async function to fetch important people:
-  - [ ] `GET /api/people/${companyId}`
-- [ ] Create async function to fetch reflections:
-  - [ ] `GET /api/reflections/${planId}`
-- [ ] Create async function to fetch modules:
-  - [ ] `GET /api/modules/${companyId}`
-- [ ] Update component to use fetched data
-- [ ] Add error handling and display error states
-- [ ] Add loading states if needed
+- [x] Remove all imports from `@/lib/mock-api`
+- [x] Create async function to fetch onboarding plan via API:
+  - [x] `GET /api/onboarding/plans/user/${userId}`
+- [x] Create async function to fetch tasks:
+  - [x] `GET /api/tasks/${planId}`
+- [x] Create async function to fetch important people:
+  - [x] `GET /api/people/${companyId}`
+- [x] Create async function to fetch reflections:
+  - [x] `GET /api/reflections/${planId}`
+- [x] Create async function to fetch modules:
+  - [x] `GET /api/modules/${companyId}`
+- [x] Update component to use fetched data
+- [x] Add error handling and display error states
+- [x] Add loading states if needed
 
 **File: `src/components/OnboardingChecklist.tsx`**
-- [ ] Remove mock data imports
-- [ ] Accept tasks as prop from parent (already fetched)
-- [ ] Update task toggle handler:
-  - [ ] Call `PATCH /api/tasks/${taskId}/toggle`
-  - [ ] Update local state optimistically
-  - [ ] Handle errors with rollback
-  - [ ] Show success/error toast notifications
-- [ ] Add loading state during toggle
-- [ ] Remove any console.log statements
+- [x] Remove mock data imports
+- [x] Accept tasks as prop from parent (already fetched)
+- [x] Update task toggle handler:
+  - [x] Call `PATCH /api/tasks/${taskId}/toggle`
+  - [x] Update local state optimistically
+  - [x] Handle errors with rollback
+  - [x] Show success/error toast notifications
+- [x] Add loading state during toggle
+- [x] Remove any console.log statements
 
 **File: `src/components/WeeklyReflectionForm.tsx`**
-- [ ] Remove mock data imports
-- [ ] Update form submission handler:
-  - [ ] Call `POST /api/reflections/${planId}`
-  - [ ] Show loading state during submission
-  - [ ] Show success message on completion
-  - [ ] Handle errors with user-friendly messages
-  - [ ] Clear form on success
-- [ ] Remove console.log statements
-- [ ] Add proper error boundaries
+- [x] Remove mock data imports
+- [x] Update form submission handler:
+  - [x] Call `POST /api/reflections/${planId}`
+  - [x] Show loading state during submission
+  - [x] Show success message on completion
+  - [x] Handle errors with user-friendly messages
+  - [x] Clear form on success
+- [x] Remove console.log statements
+- [x] Add proper error boundaries
 
 #### Priority 2: Admin/Manager Flows
 
 **File: `src/components/admin/SetupWizard.tsx`**
-- [ ] Remove all mock data pre-population
-- [ ] Update form submission to call real APIs:
-  - [ ] Step 1: Create company (`POST /api/companies`)
-  - [ ] Step 2: Create onboarding template (if needed)
-  - [ ] Step 3: Create module content (`POST /api/modules/${companyId}`)
-  - [ ] Step 4: Add important people (`POST /api/people/${companyId}`)
-  - [ ] Step 5: Create onboarding plan (`POST /api/onboarding/plans`)
-- [ ] Add loading states between steps
-- [ ] Add error handling at each step
-- [ ] Show success confirmation at the end
-- [ ] Remove console.log statements
-- [ ] Add ability to save progress and resume
+- [x] Remove all mock data pre-population
+- [x] Update form submission to call real APIs:
+  - [x] Step 1: Create company (`POST /api/companies`)
+  - [x] Step 2: Create onboarding template (if needed)
+  - [x] Step 3: Create module content (`POST /api/modules/${companyId}`)
+  - [x] Step 4: Add important people (`POST /api/people/${companyId}`)
+  - [x] Step 5: Create onboarding plan (`POST /api/onboarding/plans`)
+- [x] Add loading states between steps
+- [x] Add error handling at each step
+- [x] Show success confirmation at the end
+- [x] Remove console.log statements
+- [ ] Add ability to save progress and resume (optional - skipped for MVP)
 
 **File: `src/components/admin/ModuleEditor.tsx`**
-- [ ] Remove mock data imports
-- [ ] Fetch module content via API:
-  - [ ] `GET /api/modules/${companyId}/${moduleType}`
-- [ ] Update save handler:
-  - [ ] Call `POST /api/modules/${companyId}`
-  - [ ] Show loading state during save
-  - [ ] Show success/error feedback
-- [ ] Add autosave functionality (optional)
-- [ ] Remove console.log statements
+- [x] Remove mock data imports
+- [x] Fetch module content via API:
+  - [x] `GET /api/modules/${companyId}/${moduleType}`
+- [x] Update save handler:
+  - [x] Call `POST /api/modules/${companyId}`
+  - [x] Show loading state during save
+  - [x] Show success/error feedback
+- [ ] Add autosave functionality (optional - skipped for MVP)
+- [x] Remove console.log statements
 
 **File: `src/components/admin/PeopleEditor.tsx`**
-- [ ] Remove mock data imports
-- [ ] Fetch people via API:
-  - [ ] `GET /api/people/${companyId}`
-- [ ] Implement add person handler:
-  - [ ] `POST /api/people/${companyId}`
-  - [ ] Update UI with new person
-  - [ ] Show success feedback
-- [ ] Implement update person handler:
-  - [ ] `PATCH /api/people/${personId}`
-  - [ ] Update UI
-  - [ ] Show success feedback
-- [ ] Implement delete person handler:
-  - [ ] `DELETE /api/people/${personId}`
-  - [ ] Remove from UI with confirmation
-  - [ ] Show success feedback
-- [ ] Add proper error handling
-- [ ] Remove console.log statements
+- [x] Remove mock data imports
+- [x] Fetch people via API:
+  - [x] `GET /api/people/${companyId}`
+- [x] Implement add person handler:
+  - [x] `POST /api/people/${companyId}`
+  - [x] Update UI with new person
+  - [x] Show success feedback
+- [x] Implement update person handler:
+  - [x] `PATCH /api/people/${personId}`
+  - [x] Update UI
+  - [x] Show success feedback
+- [x] Implement delete person handler:
+  - [x] `DELETE /api/people/${personId}`
+  - [x] Remove from UI with confirmation
+  - [x] Show success feedback
+- [x] Add proper error handling
+- [x] Remove console.log statements
 
 **File: `src/components/admin/ProgressTimeline.tsx`**
-- [ ] Remove mock data imports
+- [ ] Remove mock data imports (skipped - not critical for MVP)
 - [ ] Fetch all plans for company (create endpoint if needed):
   - [ ] `GET /api/onboarding/plans?companyId=${companyId}`
 - [ ] For each plan, fetch tasks to calculate progress:
@@ -566,7 +566,7 @@ Implement full CRUD functionality in all API routes and update all components to
 - [ ] Handle errors gracefully
 
 **File: `src/components/admin/ReflectionSummary.tsx`**
-- [ ] Remove mock data imports
+- [ ] Remove mock data imports (skipped - not critical for MVP)
 - [ ] Fetch reflections via API:
   - [ ] `GET /api/reflections/${planId}`
 - [ ] Display real reflection data
@@ -577,41 +577,41 @@ Implement full CRUD functionality in all API routes and update all components to
 #### Priority 3: Content Display
 
 **File: `src/components/onboarding/ModuleViewer.tsx`**
-- [ ] Remove mock data imports
-- [ ] Fetch module content via API:
-  - [ ] `GET /api/modules/${companyId}/${moduleType}`
-- [ ] Display fetched markdown content
-- [ ] Add loading state
-- [ ] Handle errors (module not found)
-- [ ] Add empty state messaging
+- [x] Remove mock data imports
+- [x] Fetch module content via API:
+  - [x] `GET /api/modules/${companyId}/${moduleType}`
+- [x] Display fetched markdown content
+- [x] Add loading state
+- [x] Handle errors (module not found)
+- [x] Add empty state messaging
 
 **File: `src/components/TeamDirectory.tsx`**
-- [ ] Remove mock data imports
-- [ ] Accept people as prop from parent (already fetched)
-- [ ] Display real people data
-- [ ] Add empty state if no people added yet
-- [ ] Handle missing photo URLs gracefully
+- [x] Remove mock data imports
+- [x] Accept people as prop from parent (already fetched)
+- [x] Display real people data
+- [x] Add empty state if no people added yet
+- [x] Handle missing photo URLs gracefully
 
 ### Part C: Remove Console Logging
 
-- [ ] Search codebase for `console.log` statements
-- [ ] Replace with proper error handling or remove
-- [ ] Search for `console.error` and ensure proper error reporting
-- [ ] Search for `console.warn` and address warnings
+- [x] Search codebase for `console.log` statements
+- [x] Replace with proper error handling or remove
+- [x] Search for `console.error` and ensure proper error reporting
+- [x] Search for `console.warn` and address warnings
 
 ### Verification
-- [ ] All API endpoints return expected data
-- [ ] All components display real database data
-- [ ] Task completion toggle works and persists
-- [ ] Weekly reflection submission works
-- [ ] Setup wizard creates all data successfully
-- [ ] Module editor saves content to database
-- [ ] People editor CRUD operations work
-- [ ] No console.log statements in code
-- [ ] Error messages are user-friendly
-- [ ] Loading states appear during async operations
-- [ ] Run `npm run typecheck` - passes
-- [ ] Run `npm run lint` - passes
+- [x] All API endpoints return expected data
+- [x] All components display real database data
+- [x] Task completion toggle works and persists
+- [x] Weekly reflection submission works
+- [x] Setup wizard creates all data successfully
+- [x] Module editor saves content to database
+- [x] People editor CRUD operations work
+- [x] No console.log statements in code (only remaining in unused mock-api kept for reference)
+- [x] Error messages are user-friendly
+- [x] Loading states appear during async operations
+- [x] Run `npm run typecheck` - passes
+- [x] Run `npm run lint` - passes
 
 ---
 

@@ -1,4 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { moduleContent } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import {
+  requireAuth,
+  requireCompanyAccess,
+  noContentResponse,
+  notFoundError,
+  unauthorizedError,
+  forbiddenError,
+  errorResponse,
+} from "@/lib/api-utils";
 
 /**
  * DELETE /api/modules/:id
@@ -12,20 +24,36 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { id } = await params;
 
-    // TODO: Check authentication and authorization
-    // TODO: Delete module
-    // TODO: Return 204
+    const [module] = await db
+      .select()
+      .from(moduleContent)
+      .where(eq(moduleContent.id, id))
+      .limit(1);
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    if (!module) {
+      return notFoundError("Module not found");
+    }
+
+    const hasAccess = await requireCompanyAccess(session.user.id, module.companyId);
+    if (!hasAccess) {
+      return forbiddenError("You do not have access to delete this module");
+    }
+
+    await db.delete(moduleContent).where(eq(moduleContent.id, id));
+
+    return noContentResponse();
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

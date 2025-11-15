@@ -1,23 +1,21 @@
 "use client";
 
-import { ModuleContent } from "@/lib/mock-data";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+
+interface ModuleContent {
+  type: string;
+  title: string;
+  content: string;
+  order: number;
+}
 
 interface ModuleViewerProps {
   module: ModuleContent;
 }
 
 export function ModuleViewer({ module }: ModuleViewerProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
   const getModuleBadgeColor = (type: string) => {
     switch (type) {
@@ -50,10 +48,6 @@ export function ModuleViewer({ module }: ModuleViewerProps) {
           <Badge className={getModuleBadgeColor(module.type)}>
             {formatModuleType(module.type)}
           </Badge>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Clock className="w-4 h-4 mr-1" />
-            Updated {formatDate(module.updatedAt)}
-          </div>
         </div>
         <CardTitle className="text-3xl">{module.title}</CardTitle>
         <CardDescription>

@@ -1,4 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { moduleContent } from "@/lib/schema";
+import { eq, and } from "drizzle-orm";
+import {
+  requireAuth,
+  requireCompanyAccess,
+  successResponse,
+  notFoundError,
+  unauthorizedError,
+  forbiddenError,
+  errorResponse,
+} from "@/lib/api-utils";
 
 /**
  * GET /api/modules/:companyId/:type
@@ -12,20 +24,39 @@ export async function GET(
   { params }: { params: Promise<{ companyId: string; type: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { companyId, type } = await params;
 
-    // TODO: Check authentication and company access
-    // TODO: Fetch specific module by type
-    // TODO: Return module or 404
+    const hasAccess = await requireCompanyAccess(session.user.id, companyId);
+    if (!hasAccess) {
+      return forbiddenError("You do not have access to this company");
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const [module] = await db
+      .select()
+      .from(moduleContent)
+      .where(
+        and(
+          eq(moduleContent.companyId, companyId),
+          eq(moduleContent.type, type)
+        )
+      )
+      .limit(1);
+
+    if (!module) {
+      return notFoundError("Module not found");
+    }
+
+    return successResponse(module);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

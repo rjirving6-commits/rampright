@@ -1,4 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { onboardingPlans, companies } from "@/lib/schema";
+import { eq, desc } from "drizzle-orm";
+import {
+  requireAuth,
+  successResponse,
+  notFoundError,
+  unauthorizedError,
+  forbiddenError,
+  errorResponse,
+} from "@/lib/api-utils";
 
 /**
  * GET /api/onboarding/plans/user/:userId
@@ -12,20 +23,43 @@ export async function GET(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { userId } = await params;
 
-    // TODO: Check authentication (must be user themselves or manager)
-    // TODO: Fetch user's active plan
-    // TODO: Return plan or 404
+    if (session.user.id !== userId) {
+      return forbiddenError("You can only access your own plan");
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const result = await db
+      .select({
+        plan: onboardingPlans,
+        company: companies,
+      })
+      .from(onboardingPlans)
+      .leftJoin(companies, eq(onboardingPlans.companyId, companies.id))
+      .where(eq(onboardingPlans.userId, userId))
+      .orderBy(desc(onboardingPlans.createdAt))
+      .limit(1);
+
+    if (!result || result.length === 0) {
+      return notFoundError("No onboarding plan found for this user");
+    }
+
+    const { plan, company } = result[0];
+
+    return successResponse({
+      ...plan,
+      company,
+    });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

@@ -1,4 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { importantPeople } from "@/lib/schema";
+import { eq, asc } from "drizzle-orm";
+import {
+  requireAuth,
+  requireCompanyAccess,
+  successResponse,
+  createdResponse,
+  validationError,
+  unauthorizedError,
+  forbiddenError,
+  errorResponse,
+} from "@/lib/api-utils";
+import { createImportantPersonSchema, validateData } from "@/lib/validators";
 
 /**
  * GET /api/people/:companyId
@@ -12,21 +26,31 @@ export async function GET(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { companyId } = await params;
 
-    // TODO: Check authentication and company access
-    // TODO: Fetch all people for company (ordered)
-    // TODO: Return people array
+    const hasAccess = await requireCompanyAccess(session.user.id, companyId);
+    if (!hasAccess) {
+      return forbiddenError("You do not have access to this company");
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const people = await db
+      .select()
+      .from(importantPeople)
+      .where(eq(importantPeople.companyId, companyId))
+      .orderBy(asc(importantPeople.order));
+
+    return successResponse(people);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }
 
@@ -43,21 +67,39 @@ export async function POST(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
+
     const { companyId } = await params;
 
-    // TODO: Validate request body
-    // TODO: Check authentication and authorization
-    // TODO: Create person
-    // TODO: Return created person with 201
+    const hasAccess = await requireCompanyAccess(session.user.id, companyId);
+    if (!hasAccess) {
+      return forbiddenError("You do not have access to this company");
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const body = await request.json();
+    const validation = validateData(createImportantPersonSchema, body);
+
+    if (!validation.success) {
+      return validationError(validation.errors);
+    }
+
+    const [person] = await db
+      .insert(importantPeople)
+      .values({
+        ...validation.data,
+        companyId,
+      })
+      .returning();
+
+    return createdResponse(person);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

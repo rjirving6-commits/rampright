@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { MessageSquare, CheckCircle2 } from "lucide-react";
-import { submitWeeklyReflection } from "@/lib/mock-api";
+import { useRouter } from "next/navigation";
 
 interface WeeklyReflectionFormProps {
   planId: string;
@@ -25,37 +25,58 @@ interface WeeklyReflectionFormProps {
 export default function WeeklyReflectionForm({ planId, week }: WeeklyReflectionFormProps) {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [, startTransition] = useTransition();
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    unclear: "",
-    takingLonger: "",
-    mostHelpful: "",
-    confidenceScore: 5,
+    clarificationNeeded: "",
+    challenges: "",
+    goalsProgress: "",
+    confidenceLevel: 3,
+    additionalComments: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    // Submit the reflection (console.log for demo)
-    submitWeeklyReflection({
-      planId,
-      week,
-      ...formData,
-    });
-
-    // Show success message
-    setSubmitted(true);
-
-    // Reset form after 2 seconds and close dialog
-    setTimeout(() => {
-      setSubmitted(false);
-      setOpen(false);
-      setFormData({
-        unclear: "",
-        takingLonger: "",
-        mostHelpful: "",
-        confidenceScore: 5,
+    try {
+      const response = await fetch(`/api/reflections/${planId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          weekNumber: week,
+          ...formData,
+        }),
       });
-    }, 2000);
+
+      if (!response.ok) {
+        throw new Error("Failed to submit reflection");
+      }
+
+      setSubmitted(true);
+
+      setTimeout(() => {
+        setSubmitted(false);
+        setOpen(false);
+        setFormData({
+          clarificationNeeded: "",
+          challenges: "",
+          goalsProgress: "",
+          confidenceLevel: 3,
+          additionalComments: "",
+        });
+        setIsSubmitting(false);
+
+        startTransition(() => {
+          router.refresh();
+        });
+      }, 2000);
+    } catch {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (field: string, value: string | number) => {
@@ -99,64 +120,72 @@ export default function WeeklyReflectionForm({ planId, week }: WeeklyReflectionF
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6 py-4">
             <div className="space-y-2">
-              <Label htmlFor="unclear">What&apos;s still unclear to you?</Label>
+              <Label htmlFor="clarificationNeeded">What&apos;s still unclear to you?</Label>
               <Textarea
-                id="unclear"
+                id="clarificationNeeded"
                 placeholder="Share any topics or concepts you'd like more clarity on..."
-                value={formData.unclear}
-                onChange={(e) => handleChange("unclear", e.target.value)}
+                value={formData.clarificationNeeded}
+                onChange={(e) => handleChange("clarificationNeeded", e.target.value)}
                 rows={3}
-                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="takingLonger">
-                What&apos;s taking longer than expected?
+              <Label htmlFor="challenges">
+                What challenges did you face this week?
               </Label>
               <Textarea
-                id="takingLonger"
-                placeholder="Tell us about any tasks or challenges that are taking more time..."
-                value={formData.takingLonger}
-                onChange={(e) => handleChange("takingLonger", e.target.value)}
+                id="challenges"
+                placeholder="Tell us about any challenges or obstacles you encountered..."
+                value={formData.challenges}
+                onChange={(e) => handleChange("challenges", e.target.value)}
                 rows={3}
-                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mostHelpful">What was most helpful this week?</Label>
+              <Label htmlFor="goalsProgress">What progress did you make this week?</Label>
               <Textarea
-                id="mostHelpful"
-                placeholder="Share what resources, people, or activities were most valuable..."
-                value={formData.mostHelpful}
-                onChange={(e) => handleChange("mostHelpful", e.target.value)}
+                id="goalsProgress"
+                placeholder="Share your achievements and what you learned..."
+                value={formData.goalsProgress}
+                onChange={(e) => handleChange("goalsProgress", e.target.value)}
                 rows={3}
-                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="additionalComments">Additional comments (optional)</Label>
+              <Textarea
+                id="additionalComments"
+                placeholder="Any other thoughts or feedback..."
+                value={formData.additionalComments}
+                onChange={(e) => handleChange("additionalComments", e.target.value)}
+                rows={2}
               />
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label htmlFor="confidenceScore">
+                <Label htmlFor="confidenceLevel">
                   How confident do you feel in your role?
                 </Label>
                 <span className="text-2xl font-bold text-primary">
-                  {formData.confidenceScore}
+                  {formData.confidenceLevel}/5
                 </span>
               </div>
               <Slider
-                id="confidenceScore"
+                id="confidenceLevel"
                 min={1}
-                max={10}
+                max={5}
                 step={1}
-                value={[formData.confidenceScore]}
-                onValueChange={(value) => handleChange("confidenceScore", value[0])}
+                value={[formData.confidenceLevel]}
+                onValueChange={(value) => handleChange("confidenceLevel", value[0])}
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Not confident (1)</span>
-                <span>Very confident (10)</span>
+                <span>Very confident (5)</span>
               </div>
             </div>
 
@@ -168,13 +197,14 @@ export default function WeeklyReflectionForm({ planId, week }: WeeklyReflectionF
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 type="submit"
                 size="lg"
+                disabled={isSubmitting}
                 className="text-base font-semibold shadow-lg hover:shadow-xl bg-primary text-white hover:bg-primary/90 border-0"
                 style={{ backgroundColor: 'hsl(12, 88%, 65%)', color: 'white' }}
               >
-                Submit Reflection
+                {isSubmitting ? "Submitting..." : "Submit Reflection"}
               </Button>
             </DialogFooter>
           </form>

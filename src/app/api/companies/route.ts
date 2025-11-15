@@ -1,4 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { db } from "@/lib/db";
+import { companies } from "@/lib/schema";
+import {
+  requireAuth,
+  createdResponse,
+  validationError,
+  unauthorizedError,
+  errorResponse,
+} from "@/lib/api-utils";
+import { createCompanySchema, validateData } from "@/lib/validators";
 
 /**
  * POST /api/companies
@@ -18,19 +28,29 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function POST(request: NextRequest) {
   try {
-    // TODO: Implement authentication check
-    // TODO: Validate request body with Zod
-    // TODO: Insert company into database
-    // TODO: Return created company with 201 status
+    const session = await requireAuth();
+    if (!session) {
+      return unauthorizedError();
+    }
 
-    return NextResponse.json(
-      { error: "Not implemented yet" },
-      { status: 501 }
-    );
+    const body = await request.json();
+    const validation = validateData(createCompanySchema, body);
+
+    if (!validation.success) {
+      return validationError(validation.errors);
+    }
+
+    const [company] = await db
+      .insert(companies)
+      .values(validation.data)
+      .returning();
+
+    return createdResponse(company);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error && error.message === "Unauthorized") {
+      return unauthorizedError();
+    }
+
+    return errorResponse("Internal server error", 500);
   }
 }

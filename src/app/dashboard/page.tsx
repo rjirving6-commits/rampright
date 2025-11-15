@@ -11,15 +11,55 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Clock, Users, CheckCircle2, Building2, Package, TrendingUpIcon, Wrench, Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import {
-  getOnboardingPlan,
-  getTasks,
-  getTasksByWeek,
-  calculateProgress,
-  getImportantPeople,
-  getReflections,
-  getAllModuleContent,
-} from "@/lib/mock-api";
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  weekNumber: number;
+  completed: boolean;
+  order: number;
+}
+
+// Helper function to calculate progress from tasks
+function calculateProgress(tasks: Task[]) {
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(task => task.completed).length;
+  const percentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  const byWeek: Record<number, { total: number; completed: number; percentage: number }> = {};
+
+  tasks.forEach(task => {
+    if (!byWeek[task.weekNumber]) {
+      byWeek[task.weekNumber] = { total: 0, completed: 0, percentage: 0 };
+    }
+    byWeek[task.weekNumber].total++;
+    if (task.completed) {
+      byWeek[task.weekNumber].completed++;
+    }
+  });
+
+  Object.keys(byWeek).forEach(week => {
+    const weekNum = parseInt(week);
+    const weekData = byWeek[weekNum];
+    weekData.percentage = weekData.total > 0 ? Math.round((weekData.completed / weekData.total) * 100) : 0;
+  });
+
+  return { totalTasks, completedTasks, percentage, byWeek };
+}
+
+// Helper function to group tasks by week
+function getTasksByWeek(tasks: Task[]) {
+  const byWeek: Record<number, Task[]> = {};
+  tasks.forEach(task => {
+    if (!byWeek[task.weekNumber]) {
+      byWeek[task.weekNumber] = [];
+    }
+    byWeek[task.weekNumber].push(task);
+  });
+  return byWeek;
+}
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -32,16 +72,66 @@ export default async function DashboardPage() {
 
   const user = session.user;
 
-  // Get mock data for demo (hardcoded user-2 for new hire)
-  const onboardingPlan = getOnboardingPlan("user-2");
-  const tasks = getTasks("plan-1");
-  const tasksByWeek = getTasksByWeek("plan-1");
-  const progress = calculateProgress(tasks);
-  const importantPeople = getImportantPeople();
-  const reflections = getReflections("plan-1");
-  const modules = getAllModuleContent();
+  // Fetch user's onboarding plan
+  const planResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/onboarding/plans/user/${user.id}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
+
+  if (!planResponse.ok) {
+    redirect("/admin/setup");
+  }
+
+  const onboardingPlan = await planResponse.json();
+  const planId = onboardingPlan.id;
+  const companyId = onboardingPlan.companyId;
+
+  // Fetch tasks for this plan
+  const tasksResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/tasks/${planId}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
+  const tasks = tasksResponse.ok ? await tasksResponse.json() : [];
+
+  // Fetch important people
+  const peopleResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/people/${companyId}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
+  const importantPeople = peopleResponse.ok ? await peopleResponse.json() : [];
+
+  // Fetch reflections
+  const reflectionsResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/reflections/${planId}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
+  const reflections = reflectionsResponse.ok ? await reflectionsResponse.json() : [];
+
+  // Fetch module content
+  const modulesResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/modules/${companyId}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
+  const modules = modulesResponse.ok ? await modulesResponse.json() : [];
 
   // Calculate metrics
+  const tasksByWeek = getTasksByWeek(tasks);
+  const progress = calculateProgress(tasks);
   const currentWeek = onboardingPlan?.currentWeek || 1;
   const latestReflection = reflections.length > 0 ? reflections[reflections.length - 1] : null;
 
@@ -127,9 +217,9 @@ export default async function DashboardPage() {
               />
               <MetricsCard
                 title="Confidence Score"
-                value={latestReflection ? `${latestReflection.confidenceScore}/10` : "N/A"}
+                value={latestReflection?.confidenceLevel ? `${latestReflection.confidenceLevel}/5` : "N/A"}
                 change={latestReflection ? "Latest reflection" : "No reflections yet"}
-                trend={latestReflection && latestReflection.confidenceScore >= 7 ? "up" : "neutral"}
+                trend={latestReflection?.confidenceLevel && latestReflection.confidenceLevel >= 4 ? "up" : "neutral"}
                 icon={TrendingUp}
               />
             </div>
@@ -144,7 +234,7 @@ export default async function DashboardPage() {
               </p>
             </div>
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {modules.map((module) => {
+              {modules.map((module: { id: string; type: string; title: string }) => {
                 const metadata = moduleMetadata[module.type as keyof typeof moduleMetadata];
                 const Icon = metadata.icon;
 
@@ -260,7 +350,7 @@ export default async function DashboardPage() {
               </div>
             </div>
             <div className="w-full max-w-md p-4 sm:p-6 bg-card rounded-lg border border-border shadow-soft">
-              <WeeklyReflectionForm planId="plan-1" week={currentWeek} />
+              <WeeklyReflectionForm planId={planId} week={currentWeek} />
             </div>
           </section>
         </div>

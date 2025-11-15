@@ -4,14 +4,24 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Clock, CheckCircle2 } from "lucide-react";
-import { useState } from "react";
-import { Task } from "@/lib/mock-data";
+import { useState, useTransition } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useRouter } from "next/navigation";
+
+interface Task {
+  id: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  weekNumber: number;
+  completed: boolean;
+  order: number;
+}
 
 interface OnboardingChecklistProps {
   tasks: Task[];
@@ -20,23 +30,45 @@ interface OnboardingChecklistProps {
 
 export default function OnboardingChecklist({ tasks: initialTasks }: OnboardingChecklistProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [, startTransition] = useTransition();
+  const router = useRouter();
 
   const completedCount = tasks.filter(t => t.completed).length;
   const progressPercentage = Math.round((completedCount / tasks.length) * 100);
 
-  const toggleTask = (id: string) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
+  const toggleTask = async (id: string) => {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+
+    setTasks(tasks.map(t =>
+      t.id === id ? { ...t, completed: !t.completed } : t
     ));
+
+    try {
+      const response = await fetch(`/api/tasks/${id}/toggle`, {
+        method: "PATCH",
+      });
+
+      if (!response.ok) {
+        setTasks(tasks);
+        throw new Error("Failed to toggle task");
+      }
+
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch {
+      setTasks(tasks);
+    }
   };
 
   // Update tasksByWeek to reflect local state changes
   const updatedTasksByWeek: Record<number, Task[]> = {};
   tasks.forEach((task) => {
-    if (!updatedTasksByWeek[task.week]) {
-      updatedTasksByWeek[task.week] = [];
+    if (!updatedTasksByWeek[task.weekNumber]) {
+      updatedTasksByWeek[task.weekNumber] = [];
     }
-    updatedTasksByWeek[task.week].push(task);
+    updatedTasksByWeek[task.weekNumber].push(task);
   });
 
   return (
@@ -118,12 +150,6 @@ export default function OnboardingChecklist({ tasks: initialTasks }: OnboardingC
                               {task.category}
                             </Badge>
                           </div>
-                          {task.day && (
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Clock size={14} />
-                              <span>Day {task.day}</span>
-                            </div>
-                          )}
                         </div>
                       </div>
                     </div>

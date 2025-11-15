@@ -1,8 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { getModuleContent } from "@/lib/mock-api";
-import { ModuleType } from "@/lib/mock-data";
 import { ModuleViewer } from "@/components/onboarding/ModuleViewer";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Home } from "lucide-react";
@@ -23,12 +21,12 @@ interface PageProps {
 }
 
 // Valid module types
-const validModuleTypes: ModuleType[] = [
+const validModuleTypes = [
   "company_overview",
-  "product_overview",
-  "competitive_landscape",
-  "tools_systems",
-  "team_culture",
+  "product",
+  "competitive",
+  "tools",
+  "culture",
 ];
 
 export async function generateStaticParams() {
@@ -50,16 +48,39 @@ export default async function ModulePage({ params }: PageProps) {
   }
 
   // Validate module type
-  if (!validModuleTypes.includes(type as ModuleType)) {
+  if (!validModuleTypes.includes(type)) {
     notFound();
   }
+
+  // Get user's plan to find their company
+  const planResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/onboarding/plans/user/${session.user.id}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
+
+  if (!planResponse.ok) {
+    redirect("/admin/setup");
+  }
+
+  const plan = await planResponse.json();
 
   // Get module content
-  const moduleContent = getModuleContent(type as ModuleType);
+  const moduleResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/modules/${plan.companyId}/${type}`,
+    {
+      headers: { cookie: (await headers()).get("cookie") || "" },
+      cache: "no-store",
+    }
+  );
 
-  if (!moduleContent) {
+  if (!moduleResponse.ok) {
     notFound();
   }
+
+  const moduleContent = await moduleResponse.json();
 
   // Format module type for display
   const moduleTitle = moduleContent.title;
