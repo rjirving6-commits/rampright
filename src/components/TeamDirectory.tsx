@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Mail, MessageSquare } from "lucide-react";
-import { ImportantPerson } from "@/lib/mock-data";
+import { ImportantPerson } from "@/lib/schema";
 
 interface TeamDirectoryProps {
   people: ImportantPerson[];
@@ -41,7 +41,7 @@ export default function TeamDirectory({ people }: TeamDirectoryProps) {
             className="flex items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-border hover:bg-accent/50 transition-all"
           >
             <Avatar className="h-10 w-10 sm:h-12 sm:w-12 border-2 border-primary/20 flex-shrink-0">
-              {person.avatarUrl && <AvatarImage src={person.avatarUrl} alt={person.name} />}
+              {person.photoUrl && <AvatarImage src={person.photoUrl} alt={person.name} />}
               <AvatarFallback className="bg-gradient-warm text-primary-foreground font-semibold text-xs sm:text-sm">
                 {getInitials(person.name)}
               </AvatarFallback>
@@ -49,9 +49,9 @@ export default function TeamDirectory({ people }: TeamDirectoryProps) {
 
             <div className="flex-1 min-w-0">
               <h4 className="text-sm sm:text-base font-semibold text-foreground truncate">{person.name}</h4>
-              <p className="text-xs sm:text-sm text-muted-foreground truncate">{person.role}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">{person.title}</p>
               <Badge variant="outline" className="mt-1 text-xs">
-                {getTypeLabel(person.type)}
+                {getTypeLabel(person.role)}
               </Badge>
               {person.bio && (
                 <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{person.bio}</p>

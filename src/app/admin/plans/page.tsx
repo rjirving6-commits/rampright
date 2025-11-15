@@ -1,15 +1,11 @@
-import Link from "next/link";
-import { getAllOnboardingPlans, getTasks, getUser, calculateProgress } from "@/lib/mock-api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowRight, Users, UserPlus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Users, UserPlus } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 
 export default function AdminPlansPage() {
-  const plans = getAllOnboardingPlans();
+  // TODO: Implement API call to fetch all onboarding plans
+  // GET /api/onboarding/plans?companyId=${companyId}
+  const plans: Array<{ status: string }> = [];
 
   return (
     <div className="container mx-auto max-w-6xl space-y-6 sm:space-y-8 py-6 sm:py-8 px-4 sm:px-6">
@@ -78,101 +74,7 @@ export default function AdminPlansPage() {
           />
         ) : (
           <div className="space-y-4">
-            {plans.map((plan) => {
-            const user = getUser(plan.userId);
-            const tasks = getTasks(plan.id);
-            const progress = calculateProgress(tasks);
-            const startDate = new Date(plan.startDate);
-            const daysSinceStart = Math.floor(
-              (new Date().getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-            );
-
-            if (!user) return null;
-
-            return (
-              <Card key={plan.id} className="transition-shadow hover:shadow-md">
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    {/* User Info */}
-                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                      <Avatar className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0">
-                        <AvatarImage src={user.avatarUrl} alt={user.name} />
-                        <AvatarFallback>
-                          {user.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="space-y-1 min-w-0 flex-1">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                          <h3 className="text-sm sm:text-base font-semibold truncate">{user.name}</h3>
-                          <Badge
-                            variant={
-                              plan.status === "completed"
-                                ? "default"
-                                : plan.status === "in_progress"
-                                ? "secondary"
-                                : "outline"
-                            }
-                            className={cn(
-                              "text-xs flex-shrink-0",
-                              plan.status === "completed" &&
-                                "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200"
-                            )}
-                          >
-                            {plan.status === "in_progress"
-                              ? "In Progress"
-                              : plan.status === "completed"
-                              ? "Completed"
-                              : "Paused"}
-                          </Badge>
-                        </div>
-                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{user.email}</p>
-                      </div>
-                    </div>
-
-                    {/* Progress Info */}
-                    <div className="flex flex-col gap-3 sm:min-w-[200px] lg:min-w-[300px]">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Overall Progress</span>
-                        <span className="font-medium">
-                          {progress.completedTasks}/{progress.totalTasks} tasks
-                        </span>
-                      </div>
-                      <div className="h-2 w-full rounded-full bg-muted">
-                        <div
-                          className={cn(
-                            "h-full rounded-full transition-all",
-                            progress.percentage === 100
-                              ? "bg-green-500"
-                              : progress.percentage > 0
-                              ? "bg-blue-500"
-                              : "bg-muted"
-                          )}
-                          style={{ width: `${progress.percentage}%` }}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>
-                          Week {plan.currentWeek} of 4 • {daysSinceStart} days
-                        </span>
-                        <span className="font-medium">{progress.percentage}%</span>
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    <Link href={`/admin/plans/${plan.id}`} className="w-full sm:w-auto">
-                      <Button variant="outline" className="gap-2 w-full sm:w-auto">
-                        View Details
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+            {/* TODO: Render plans list when API is implemented */}
           </div>
         )}
       </div>

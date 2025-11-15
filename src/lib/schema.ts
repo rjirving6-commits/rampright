@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, boolean, integer, uuid, index } from "drizzle-orm/pg-core";
+import { InferSelectModel } from "drizzle-orm";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -169,3 +170,12 @@ export const weeklyReflections = pgTable("weekly_reflections", {
 }, (table) => ({
   planIdIdx: index("weekly_reflections_plan_id_idx").on(table.planId),
 }));
+
+// Type exports
+export type Task = InferSelectModel<typeof tasks>;
+export type ImportantPerson = InferSelectModel<typeof importantPeople>;
+export type WeeklyReflection = InferSelectModel<typeof weeklyReflections>;
+export type Company = InferSelectModel<typeof companies>;
+export type OnboardingPlan = InferSelectModel<typeof onboardingPlans>;
+export type OnboardingTemplate = InferSelectModel<typeof onboardingTemplates>;
+export type ModuleContent = InferSelectModel<typeof moduleContent>;

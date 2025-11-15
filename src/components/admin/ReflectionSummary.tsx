@@ -1,6 +1,6 @@
 "use client";
 
-import { WeeklyReflection } from "@/lib/mock-data";
+import { WeeklyReflection } from "@/lib/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -51,7 +51,7 @@ export function ReflectionSummary({ reflections, totalWeeks = 4 }: ReflectionSum
 
       <div className="space-y-3">
         {allWeeks.map((week) => {
-          const reflection = reflections.find((r) => r.week === week);
+          const reflection = reflections.find((r) => r.weekNumber === week);
           const isOpen = openWeeks.includes(week);
 
           if (!reflection) {
@@ -79,10 +79,10 @@ export function ReflectionSummary({ reflections, totalWeeks = 4 }: ReflectionSum
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <CardTitle className="text-base font-medium">
-                          Week {reflection.week}
+                          Week {reflection.weekNumber}
                         </CardTitle>
-                        <Badge variant={getConfidenceBadge(reflection.confidenceScore)}>
-                          Confidence: {reflection.confidenceScore}/10
+                        <Badge variant={getConfidenceBadge(reflection.confidenceLevel || 0)}>
+                          Confidence: {reflection.confidenceLevel || 0}/10
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2">
@@ -105,26 +105,26 @@ export function ReflectionSummary({ reflections, totalWeeks = 4 }: ReflectionSum
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <span className="font-medium">Confidence Level</span>
-                        <span className={`font-semibold ${getConfidenceColor(reflection.confidenceScore)}`}>
-                          {reflection.confidenceScore}/10
+                        <span className={`font-semibold ${getConfidenceColor(reflection.confidenceLevel || 0)}`}>
+                          {reflection.confidenceLevel || 0}/10
                         </span>
                       </div>
                       <div className="h-2 w-full rounded-full bg-muted">
                         <div
                           className={`h-full rounded-full transition-all ${
-                            reflection.confidenceScore >= 8
+                            (reflection.confidenceLevel || 0) >= 8
                               ? "bg-green-500"
-                              : reflection.confidenceScore >= 6
+                              : (reflection.confidenceLevel || 0) >= 6
                               ? "bg-yellow-500"
                               : "bg-red-500"
                           }`}
-                          style={{ width: `${reflection.confidenceScore * 10}%` }}
+                          style={{ width: `${(reflection.confidenceLevel || 0) * 10}%` }}
                         />
                       </div>
                     </div>
 
                     {/* What's Unclear */}
-                    {reflection.unclear && (
+                    {reflection.clarificationNeeded && (
                       <div className="space-y-2 rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-900 dark:bg-orange-950/30">
                         <div className="flex items-center gap-2">
                           <AlertCircle className="h-4 w-4 text-orange-600 dark:text-orange-400" />
@@ -133,37 +133,37 @@ export function ReflectionSummary({ reflections, totalWeeks = 4 }: ReflectionSum
                           </h4>
                         </div>
                         <p className="text-sm text-orange-800 dark:text-orange-200">
-                          {reflection.unclear}
+                          {reflection.clarificationNeeded}
                         </p>
                       </div>
                     )}
 
-                    {/* Taking Longer */}
-                    {reflection.takingLonger && (
+                    {/* Challenges */}
+                    {reflection.challenges && (
                       <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-900 dark:bg-amber-950/30">
                         <div className="flex items-center gap-2">
                           <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                           <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100">
-                            Taking Longer Than Expected
+                            Challenges
                           </h4>
                         </div>
                         <p className="text-sm text-amber-800 dark:text-amber-200">
-                          {reflection.takingLonger}
+                          {reflection.challenges}
                         </p>
                       </div>
                     )}
 
-                    {/* Most Helpful */}
-                    {reflection.mostHelpful && (
+                    {/* Goals Progress */}
+                    {reflection.goalsProgress && (
                       <div className="space-y-2 rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-900 dark:bg-green-950/30">
                         <div className="flex items-center gap-2">
                           <Lightbulb className="h-4 w-4 text-green-600 dark:text-green-400" />
                           <h4 className="text-sm font-semibold text-green-900 dark:text-green-100">
-                            Most Helpful
+                            Goals Progress
                           </h4>
                         </div>
                         <p className="text-sm text-green-800 dark:text-green-200">
-                          {reflection.mostHelpful}
+                          {reflection.goalsProgress}
                         </p>
                       </div>
                     )}
@@ -186,7 +186,7 @@ export function ReflectionSummary({ reflections, totalWeeks = 4 }: ReflectionSum
               <span className="text-muted-foreground">Average Confidence:</span>
               <span className="font-semibold">
                 {(
-                  reflections.reduce((sum, r) => sum + r.confidenceScore, 0) /
+                  reflections.reduce((sum, r) => sum + (r.confidenceLevel || 0), 0) /
                   reflections.length
                 ).toFixed(1)}
                 /10
@@ -198,7 +198,7 @@ export function ReflectionSummary({ reflections, totalWeeks = 4 }: ReflectionSum
                 {Math.round((reflections.length / totalWeeks) * 100)}%
               </span>
             </div>
-            {reflections.some((r) => r.confidenceScore < 6) && (
+            {reflections.some((r) => (r.confidenceLevel || 0) < 6) && (
               <div className="flex items-start gap-2 rounded-md bg-amber-100 p-2 dark:bg-amber-950">
                 <AlertCircle className="mt-0.5 h-4 w-4 text-amber-600 dark:text-amber-400" />
                 <p className="text-xs text-amber-900 dark:text-amber-100">

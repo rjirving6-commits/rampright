@@ -1,6 +1,6 @@
 "use client";
 
-import { Task, WeeklyReflection } from "@/lib/mock-data";
+import { Task, WeeklyReflection } from "@/lib/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, FileText, AlertCircle } from "lucide-react";
@@ -29,7 +29,7 @@ export function ProgressTimeline({
   };
 
   const hasReflection = (week: number) => {
-    return reflections.some((r) => r.week === week);
+    return reflections.some((r) => r.weekNumber === week);
   };
 
   const getWeekStatus = (week: number) => {
