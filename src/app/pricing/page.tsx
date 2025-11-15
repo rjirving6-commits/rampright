@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Pricing - Simple, Transparent Plans",
-  description: "Choose the perfect onboarding plan for your team. All plans include a 14-day free trial. From Starter to Enterprise, find the right fit for your organization.",
+  description: "Choose the perfect onboarding plan for your team. From Starter to Enterprise, find the right fit for your organization.",
 };
 
 interface PricingTier {
@@ -90,7 +90,7 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Choose the perfect plan for your team. All plans include a 14-day free trial.
+            Choose the perfect plan for your team.
           </p>
         </div>
 
