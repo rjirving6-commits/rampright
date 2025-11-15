@@ -91,7 +91,7 @@ export default async function DashboardPage() {
 
   // Fetch tasks for this plan
   const tasksResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/tasks/${planId}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/tasks/plan/${planId}`,
     {
       headers: { cookie: (await headers()).get("cookie") || "" },
       cache: "no-store",
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
 
   // Fetch important people
   const peopleResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/people/${companyId}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/people/company/${companyId}`,
     {
       headers: { cookie: (await headers()).get("cookie") || "" },
       cache: "no-store",
@@ -121,7 +121,7 @@ export default async function DashboardPage() {
 
   // Fetch module content
   const modulesResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/modules/${companyId}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/modules/company/${companyId}`,
     {
       headers: { cookie: (await headers()).get("cookie") || "" },
       cache: "no-store",

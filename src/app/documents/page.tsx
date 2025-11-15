@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, CheckCircle2, Circle, Clock, Zap, Bug, Sparkles } from "lucide-react";
 
+// Note: Metadata export not supported in client components
+// SEO metadata is handled in layout.tsx or via dynamic meta tags
+
 interface ChangelogEntry {
   version: string;
   date: string;
@@ -347,7 +350,7 @@ export default function DocumentsPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
         {/* Page Header */}
-        <div className="text-center mb-12 space-y-4">
+        <div className="text-center mb-16 space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             Product Updates
           </h1>

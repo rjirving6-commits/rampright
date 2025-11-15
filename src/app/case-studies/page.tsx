@@ -3,6 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Building2, TrendingUp, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Customer Success Stories - Real Results from Leading Companies",
+  description: "See how leading companies are transforming their onboarding with our platform. Read real success stories and measurable results from organizations across industries.",
+};
 
 interface CaseStudy {
   id: string;

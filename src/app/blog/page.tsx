@@ -3,6 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Blog & Resources - Employee Onboarding Insights",
+  description: "Discover insights, best practices, and expert advice on employee onboarding and team success. Learn from industry leaders and transform your onboarding process.",
+};
 
 interface BlogPost {
   id: string;

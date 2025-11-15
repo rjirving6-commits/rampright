@@ -69,7 +69,7 @@ export default async function ModulePage({ params }: PageProps) {
 
   // Get module content
   const moduleResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/modules/${plan.companyId}/${type}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/modules/company/${plan.companyId}/${type}`,
     {
       headers: { cookie: (await headers()).get("cookie") || "" },
       cache: "no-store",

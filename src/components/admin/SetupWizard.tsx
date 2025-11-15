@@ -99,7 +99,7 @@ export function SetupWizard() {
 
       for (const moduleItem of data.modules) {
         if (moduleItem.content) {
-          await fetch(`/api/modules/${company.id}`, {
+          await fetch(`/api/modules/company/${company.id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(moduleItem),
@@ -108,7 +108,7 @@ export function SetupWizard() {
       }
 
       for (const person of data.people) {
-        await fetch(`/api/people/${company.id}`, {
+        await fetch(`/api/people/company/${company.id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(person),

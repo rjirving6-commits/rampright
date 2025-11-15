@@ -2,6 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pricing - Simple, Transparent Plans",
+  description: "Choose the perfect onboarding plan for your team. All plans include a 14-day free trial. From Starter to Enterprise, find the right fit for your organization.",
+};
 
 interface PricingTier {
   name: string;

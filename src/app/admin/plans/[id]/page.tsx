@@ -12,7 +12,7 @@ export default async function PlanDetailPage({ params }: PageProps) {
 
   // TODO: Implement API calls:
   // - GET /api/onboarding/plans/${id}
-  // - GET /api/tasks/${planId}
+  // - GET /api/tasks/plan/${planId}
   // - GET /api/reflections/${planId}
 
   return (
