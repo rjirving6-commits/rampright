@@ -1,13 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Pricing - Simple, Transparent Plans",
-  description: "Choose the perfect onboarding plan for your team. From Starter to Enterprise, find the right fit for your organization.",
-};
 
 interface PricingTier {
   name: string;
@@ -22,9 +19,9 @@ interface PricingTier {
 
 const pricingTiers: PricingTier[] = [
   {
-    name: "Starter",
+    name: "Professional",
     description: "Perfect for small teams just getting started with onboarding",
-    price: "$49",
+    price: "1000",
     priceDescription: "per month",
     features: [
       "Up to 10 active onboarding plans",
@@ -35,12 +32,12 @@ const pricingTiers: PricingTier[] = [
       "Community support",
       "Mobile-friendly interface",
     ],
-    cta: "Start Free Trial",
+    cta: "Start",
   },
   {
-    name: "Professional",
+    name: "Elite",
     description: "Ideal for growing companies with advanced onboarding needs",
-    price: "$149",
+    price: "2500",
     priceDescription: "per month",
     features: [
       "Up to 50 active onboarding plans",
@@ -81,6 +78,30 @@ const pricingTiers: PricingTier[] = [
 ];
 
 export default function PricingPage() {
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
+
+  const calculatePrice = (monthlyPrice: string): { price: string; description: string } => {
+    if (monthlyPrice === "Custom") {
+      return { price: "Custom", description: "contact sales" };
+    }
+
+    const monthly = parseFloat(monthlyPrice);
+    if (billingPeriod === "monthly") {
+      return {
+        price: `$${monthly.toLocaleString()}`,
+        description: "per month",
+      };
+    } else {
+      // Annual price: monthly * 12 * 0.85 (15% discount), then divide by 12 to show monthly equivalent
+      const annual = monthly * 12 * 0.85;
+      const monthlyEquivalent = annual / 12;
+      return {
+        price: `$${Math.round(monthlyEquivalent).toLocaleString()}`,
+        description: "per month",
+      };
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
@@ -92,6 +113,34 @@ export default function PricingPage() {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Choose the perfect plan for your team.
           </p>
+          
+          {/* Billing Period Toggle */}
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <span className={`text-sm font-medium ${billingPeriod === "monthly" ? "text-foreground" : "text-muted-foreground"}`}>
+              Monthly
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={billingPeriod === "annual"}
+              onClick={() => setBillingPeriod(billingPeriod === "monthly" ? "annual" : "monthly")}
+              className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  billingPeriod === "annual" ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+            <span className={`text-sm font-medium ${billingPeriod === "annual" ? "text-foreground" : "text-muted-foreground"}`}>
+              Annual
+            </span>
+            {billingPeriod === "annual" && (
+              <Badge variant="secondary" className="ml-2">
+                Save 15%
+              </Badge>
+            )}
+          </div>
         </div>
 
         {/* Pricing Cards */}
@@ -119,10 +168,17 @@ export default function PricingPage() {
                   {tier.description}
                 </CardDescription>
                 <div className="mt-6">
-                  <div className="text-4xl font-bold">{tier.price}</div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {tier.priceDescription}
-                  </div>
+                  {(() => {
+                    const { price, description } = calculatePrice(tier.price);
+                    return (
+                      <>
+                        <div className="text-4xl font-bold">{price}</div>
+                        <div className="text-sm text-muted-foreground mt-1">
+                          {description}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </CardHeader>
 
