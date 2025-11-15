@@ -127,7 +127,7 @@ After completing setup, you can create onboarding plans for new hires:
 
 ## 👥 How New Hires Access the Platform
 
-> **Note**: Full email invitation system coming in Phase 3 of production migration
+> **Note**: Automated email invitation system is a planned future enhancement
 
 Currently, new hires can access their onboarding dashboard after authentication:
 
@@ -244,8 +244,8 @@ Before deploying to production:
 
 ## 📚 Documentation
 
-- **Database Schema** - Coming in Phase 3
-- **API Reference** - Coming in Phase 3
+- **Database Schema** - See `docs/database-schema.md` for full schema documentation
+- **API Reference** - See `docs/api-reference.md` for endpoint documentation
 - **Better Auth Guide** - `docs/technical/betterauth/`
 - **AI Integration** - `docs/technical/ai/`
 

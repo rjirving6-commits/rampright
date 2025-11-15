@@ -34,40 +34,54 @@ This is a Next.js 15 boilerplate for building AI-powered applications with authe
 ```
 src/
 ├── app/                          # Next.js App Router
-│   ├── api/
+│   ├── api/                      # API routes
 │   │   ├── auth/[...all]/       # Better Auth catch-all route
 │   │   ├── chat/route.ts        # AI chat endpoint (OpenRouter)
-│   │   └── diagnostics/         # System diagnostics
+│   │   ├── companies/           # Company management APIs
+│   │   ├── diagnostics/         # System diagnostics
+│   │   ├── modules/             # Module content APIs
+│   │   ├── onboarding/plans/    # Onboarding plan APIs
+│   │   ├── people/              # Important people APIs
+│   │   ├── reflections/         # Weekly reflections APIs
+│   │   └── tasks/               # Task management APIs
+│   ├── admin/                   # Manager/admin pages
+│   │   ├── setup/               # Setup wizard
+│   │   └── plans/               # Plan management
 │   ├── chat/page.tsx            # AI chat interface (protected)
-│   ├── dashboard/page.tsx       # User dashboard (protected)
+│   ├── dashboard/page.tsx       # New hire dashboard (protected)
+│   ├── onboarding/              # Onboarding module pages
 │   ├── profile/page.tsx         # User profile (protected)
 │   ├── page.tsx                 # Home/landing page
 │   └── layout.tsx               # Root layout
 ├── components/
+│   ├── admin/                   # Admin-specific components
+│   │   ├── SetupWizard.tsx
+│   │   ├── ModuleEditor.tsx
+│   │   └── PeopleEditor.tsx
 │   ├── auth/                    # Authentication components
 │   │   ├── sign-in-button.tsx
 │   │   ├── sign-out-button.tsx
 │   │   └── user-profile.tsx
+│   ├── onboarding/              # Onboarding flow components
+│   │   ├── OnboardingChecklist.tsx
+│   │   ├── WeeklyReflectionForm.tsx
+│   │   └── ModuleViewer.tsx
 │   ├── ui/                      # shadcn/ui components
 │   │   ├── button.tsx
 │   │   ├── card.tsx
 │   │   ├── dialog.tsx
-│   │   ├── dropdown-menu.tsx
-│   │   ├── avatar.tsx
-│   │   ├── badge.tsx
-│   │   ├── separator.tsx
-│   │   ├── mode-toggle.tsx      # Dark/light mode toggle
-│   │   └── github-stars.tsx
+│   │   └── ...
 │   ├── site-header.tsx          # Main navigation header
 │   ├── site-footer.tsx          # Footer component
 │   ├── theme-provider.tsx       # Dark mode provider
-│   ├── setup-checklist.tsx      # Setup guide component
-│   └── starter-prompt-modal.tsx # Starter prompts modal
+│   └── TeamDirectory.tsx        # Team directory component
 └── lib/
     ├── auth.ts                  # Better Auth server config
     ├── auth-client.ts           # Better Auth client hooks
     ├── db.ts                    # Database connection
-    ├── schema.ts                # Drizzle schema (users, sessions, etc.)
+    ├── schema.ts                # Drizzle schema (full app schema)
+    ├── api-utils.ts             # API helpers and middleware
+    ├── validators.ts            # Zod schemas for validation
     └── utils.ts                 # Utility functions (cn, etc.)
 ```
 
@@ -114,6 +128,8 @@ npm run db:reset     # Reset database (drop all tables)
 
 The project includes technical documentation in `docs/`:
 
+- `docs/database-schema.md` - Complete database schema reference
+- `docs/api-reference.md` - API endpoint documentation and examples
 - `docs/technical/ai/streaming.md` - AI streaming implementation guide
 - `docs/technical/ai/structured-data.md` - Structured data extraction
 - `docs/technical/react-markdown.md` - Markdown rendering guide
@@ -216,6 +232,103 @@ The project includes technical documentation in `docs/`:
 2. Frontend: `src/app/chat/page.tsx`
 3. Reference streaming docs: `docs/technical/ai/streaming.md`
 4. Remember to use OpenRouter, not direct OpenAI
+
+### Database Schema
+
+The application uses a comprehensive relational database schema for the onboarding platform:
+
+**Core Tables:**
+- `companies` - Company profiles and settings
+- `onboardingTemplates` - Reusable onboarding plan templates
+- `onboardingPlans` - Individual new hire onboarding instances
+- `tasks` - Checklist items grouped by week
+- `moduleContent` - Company info, product, tools, culture content
+- `importantPeople` - Team directory with managers, buddies, stakeholders
+- `weeklyReflections` - New hire weekly feedback submissions
+
+**Better Auth Tables:**
+- `user` - User accounts and profiles
+- `session` - Active user sessions
+- `account` - OAuth provider linkages
+- `verification` - Email verification tokens
+
+For detailed schema information including field types, relationships, and indexes, see `docs/database-schema.md`.
+
+### API Development Guidelines
+
+**Structure:**
+- All API routes in `src/app/api/[resource]/`
+- Use TypeScript types from `@/lib/schema`
+- Validate inputs with Zod schemas from `@/lib/validators`
+- Use helpers from `@/lib/api-utils` for auth and responses
+
+**Authentication:**
+```typescript
+import { requireAuth } from "@/lib/api-utils";
+
+export async function GET(req: Request) {
+  const session = await requireAuth();
+  // session.user contains authenticated user
+}
+```
+
+**Authorization:**
+```typescript
+import { requireCompanyAccess } from "@/lib/api-utils";
+
+export async function GET(req: Request, { params }: { params: { companyId: string } }) {
+  const session = await requireAuth();
+  await requireCompanyAccess(session.user.id, params.companyId);
+  // User has access to this company
+}
+```
+
+**Error Handling:**
+```typescript
+import { errorResponse, validationError, notFoundError } from "@/lib/api-utils";
+
+// Validation error
+return validationError({ field: "error message" });
+
+// Not found
+return notFoundError("Resource not found");
+
+// Generic error
+return errorResponse("Something went wrong", 500);
+```
+
+**Success Responses:**
+```typescript
+import { successResponse, createdResponse } from "@/lib/api-utils";
+
+// Standard success
+return successResponse({ data: result });
+
+// Created resource
+return createdResponse({ data: newResource });
+```
+
+For complete API documentation including all endpoints, request/response formats, and examples, see `docs/api-reference.md`.
+
+### Database Migration Workflow
+
+**Making Schema Changes:**
+
+1. Update schema in `src/lib/schema.ts`
+2. Generate migration: `npm run db:generate`
+3. Review the generated SQL in `drizzle/` folder
+4. Apply migration: `npm run db:migrate`
+5. Verify with Drizzle Studio: `npm run db:studio`
+
+**Development vs Production:**
+
+- Development: Use `npm run db:dev` (push without migrations) for rapid iteration
+- Production: Always use migrations (`db:generate` + `db:migrate`)
+
+**Important:**
+- Never modify existing migrations
+- Test migrations on development database first
+- Backup production data before running migrations
 
 ## Package Manager
 

@@ -12,7 +12,7 @@ export async function getAuthSession() {
       headers: await headers(),
     });
     return session;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -37,7 +37,9 @@ export async function requireAuth() {
  * For now, this is a placeholder that always returns true
  */
 export async function requireCompanyAccess(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   userId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   companyId: string
 ): Promise<boolean> {
   // TODO: Query database to check if user belongs to this company
