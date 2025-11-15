@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -37,21 +37,6 @@ export default function Hero() {
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 See How It Works
               </Button>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 pt-2 sm:pt-4">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="text-success flex-shrink-0" size={18} />
-                <span className="text-xs sm:text-sm text-muted-foreground">25% faster ramp time</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="text-success flex-shrink-0" size={18} />
-                <span className="text-xs sm:text-sm text-muted-foreground">10% better retention</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="text-success flex-shrink-0" size={18} />
-                <span className="text-xs sm:text-sm text-muted-foreground">90% completion rate</span>
-              </div>
             </div>
           </div>
 

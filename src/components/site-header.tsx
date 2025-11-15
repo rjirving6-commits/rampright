@@ -5,7 +5,6 @@ import { UserProfile } from "@/components/auth/user-profile";
 import { useSession } from "@/lib/auth-client";
 import { Sparkles, LayoutDashboard, Settings, Users } from "lucide-react";
 import { Button } from "./ui/button";
-import { ModeToggle } from "./ui/mode-toggle";
 
 export function SiteHeader() {
   const { data: session } = useSession();
@@ -52,7 +51,6 @@ export function SiteHeader() {
             )}
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <ModeToggle />
             <UserProfile />
           </div>
         </div>
